@@ -1,0 +1,7 @@
+.custom-canvas {
+  position: relative;
+  width: 600px;
+  height: 600px;
+  border: 2px dashed #ccc;
+  margin: auto;
+}

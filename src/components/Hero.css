@@ -1,0 +1,103 @@
+.hero {
+    display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 60px;
+  padding: 80px 100px;
+  min-height: 90vh;
+
+  width: 100%;          /* FULL WIDTH */
+  background: linear-gradient(135deg, #faf5ff, #fdf2f8);
+
+  position: relative;
+  min-height: 80vh; 
+}
+.hero-left {
+  margin-right: 80px;   /* pushes it left */
+}
+.hero-right {
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;   /* spacing between elements */
+}
+.hero-right h1 {
+  font-size: 64px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #4c1d95;
+}
+
+.hero-right span {
+  background: linear-gradient(90deg, #7c3aed, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-right p {
+  font-size: 17px;
+  color: #6b7280;
+  line-height: 1.6;
+  max-width: 420px;
+}
+.cta {
+  margin-top: 10px;
+  width: fit-content;
+
+  padding: 14px 30px;
+  border-radius: 30px;
+  border: none;
+
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+
+  background: linear-gradient(90deg, #7c3aed, #ec4899);
+
+  box-shadow: 
+    0 10px 25px rgba(124, 58, 237, 0.4),
+    0 0 20px rgba(236, 72, 153, 0.2);
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.cta:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 
+    0 15px 35px rgba(124, 58, 237, 0.5),
+    0 0 25px rgba(236, 72, 153, 0.4);
+}
+.hero-left img {
+  margin-left: -100px;
+    filter: drop-shadow(0 20px 30px rgba(124, 58, 237, 0.3));
+}
+.floating {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.4;
+   position: absolute;
+  border-radius: 50%;
+  
+  z-index: 0
+}
+
+.bead1 {
+    width: 20px;
+  height: 20px;
+  background: purple;   /* TEMP for testing */
+  top: 100px;
+  left: 100px;
+}
+
+.bead2 {
+ width: 20px;
+  height: 20px;
+  background: blue;  /* TEMP for testing */
+  bottom: 100px;
+  right: 100px;
+}
+.hero-left,
+.hero-right {
+  position: relative;
+  z-index: 2;
+}

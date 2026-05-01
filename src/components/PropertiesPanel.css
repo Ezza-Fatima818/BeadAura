@@ -1,0 +1,66 @@
+.designer-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Top Bar */
+.topbar {
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  background: white;
+  border-bottom: 1px solid #ddd;
+}
+
+.top-actions button {
+  margin-left: 10px;
+}
+
+/* Main Layout */
+.designer-container {
+  display: flex;
+  flex: 1;
+}
+
+/* Left */
+.sidebar {
+  width: 260px;
+  border-right: 1px solid #eee;
+}
+
+/* Center */
+.canvas-area {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f7f7f7;
+}
+
+/* Right */
+.properties {
+  width: 260px;
+  border-left: 1px solid #eee;
+  padding: 15px;
+}
+
+/* Color UI */
+.color-group {
+  display: flex;
+  gap: 10px;
+}
+
+.color-circle {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Size UI */
+.size-group button {
+  margin-right: 8px;
+}

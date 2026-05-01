@@ -1,0 +1,75 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+   padding: 15px 60px;
+
+  background: linear-gradient(90deg, #7c3aed, #ec4899);
+  color: white;
+  font-family: "Poppins", sans-serif;
+border-bottom: 1px solid rgba(255,255,255,0.2);
+
+}
+
+/* LOGO */
+.logo {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.circle {
+  color: gold;
+  margin-left: 5px;
+}
+
+/* NAV LINKS */
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+}
+
+.nav-links li {
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.nav-links li:hover {
+  opacity: 0.8;
+}
+
+/* BUTTONS */
+.nav-buttons button {
+  margin-left: 15px;
+  padding: 10px 22px;   /* bigger */
+  border-radius: 25px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* LOGIN */
+.login {
+  background: transparent;
+  border: 1.5px solid white;
+  color: white;
+}
+
+/* SIGNUP */
+.signup {
+  background: white;
+  color: #7c3aed;
+  font-weight: 600;
+
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+/* HOVER EFFECT */
+.nav-buttons button:hover {
+  transform: scale(1.08);
+  opacity: 0.9;
+}

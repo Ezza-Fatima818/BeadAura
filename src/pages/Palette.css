@@ -1,0 +1,89 @@
+.palette {
+  width: 280px;
+  height: 100vh;
+  background: white;
+  padding: 20px;
+  overflow-y: auto;
+  border-right: 1px solid #eee;
+}
+
+.palette-title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #8e44ad;
+}
+
+.section {
+  margin-bottom: 30px;
+}
+
+.string-icons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.string-box {
+  background: #f8ecff;
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  width: 90px;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.string-box:hover {
+  background: #d8b4ff;
+}
+
+.category-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.category-btn {
+    background: white;
+  border: 1px solid #e5d8ff;
+  color: #6a1b9a;
+  padding: 10px 18px;
+  border-radius: 12px;
+  margin: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.05);
+
+}
+
+.category-btn:hover {
+  background: linear-gradient(
+    135deg,
+    #b388ff,
+    #8e44ad
+  );
+  color: white;
+  transform: translateY(-2px);
+}
+
+.beadRow {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 15px;
+}
+.view-more-btn {
+  margin-top: 15px;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: #b388ff;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.view-more-btn:hover {
+  background: #9c6bff;
+}
