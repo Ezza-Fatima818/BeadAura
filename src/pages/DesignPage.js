@@ -1,11 +1,9 @@
 import { useDrop } from "react-dnd";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import "./DesignPage.css";
 import FlowerBracelet from "../components/templates/FlowerBracelet";
 import CustomBracelet from "../components/templates/CustomBracelet";
 import { useNavigate } from "react-router-dom";
-import html2canvas from "html2canvas";
-import { useState } from "react";
 
 export default function DesignPage({
   selectedString,
@@ -15,20 +13,16 @@ export default function DesignPage({
   setSelectedBeadIndex
 }) {
   const ref = useRef(null);
-  const designRef = useRef(null);   // KEEP HERE
   const navigate = useNavigate();
   const [positions, setPositions] = useState([]);
-  
 
   // Drag and Drop
   const [{ isOver }, drop] = useDrop(() => ({
     accept: "BEAD",
-
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
   }));
-
 
   if (!selectedString) {
     return (
@@ -37,83 +31,103 @@ export default function DesignPage({
       </div>
     );
   }
-const getColoredImage = (src, hue, brightness, size) => {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src = src;
 
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
+  // 🔥 CANVAS DRAW FUNCTION (IMPORTANT)
+  const drawDesignToCanvas = async (beads) => {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
 
-      const dimension =
-        size === "large" ? 90 :
-        size === "small" ? 45 : 65;
+    const width = 600;
+    const height = 400;
 
-      canvas.width = dimension;
-      canvas.height = dimension;
+    canvas.width = width;
+    canvas.height = height;
 
-      // draw original bead
-      ctx.drawImage(img, 0, 0, dimension, dimension);
+    // white background
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, width, height);
 
-      // apply color inside canvas
-      ctx.globalCompositeOperation = "source-atop";
-      ctx.filter = `hue-rotate(${hue}deg) brightness(${brightness})`;
+    const loadImage = (src) =>
+      new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.src = src;
+        img.onload = () => resolve(img);
+      });
 
-      ctx.drawImage(canvas, 0, 0);
+    for (const bead of Object.values(beads)) {
+      if (!bead || bead.x === undefined || bead.y === undefined) continue;
 
-      resolve(canvas.toDataURL("image/png"));
-    };
-  });
-};
-// Save Design
-const saveDesign = async () => {
+      const img = await loadImage(bead.src);
+
+      const size =
+        bead.size === "large" ? 90 :
+        bead.size === "small" ? 45 : 65;
+
+      ctx.filter = `
+        brightness(${bead.brightness || 1})
+        sepia(1)
+        saturate(5)
+        hue-rotate(${bead.hue || 0}deg)
+      `;
+
+      ctx.drawImage(
+        img,
+        bead.x - size / 2,
+        bead.y - size / 2,
+        size,
+        size
+      );
+
+      ctx.filter = "none";
+    }
+
+    return canvas.toDataURL("image/jpeg", 0.9);
+  };
+
+  // 🔥 FINAL SAVE DESIGN (NO html2canvas)
+ const saveDesign = async () => {
   try {
     const designData = [];
 
-    Object.keys(beads).forEach((key) => {
-      const bead = beads[key];
-
+    Object.values(beads).forEach((bead) => {
       if (bead && bead.x !== undefined && bead.y !== undefined) {
         designData.push({
           x: bead.x,
           y: bead.y,
           src: bead.src,
-          size: bead.size
+          size: bead.size,
+          hue: bead.hue,
+          brightness: bead.brightness
         });
       }
     });
-
-    console.log("FINAL DESIGN DATA:", designData);
 
     if (designData.length === 0) {
       alert("No beads to save!");
       return;
     }
 
-    const canvas = await html2canvas(designRef.current, {
-      useCORS: true,
-        useCORS: true,
-  backgroundColor: "#ffffff",
-  scale: 2
-    });
+    const imageData = await drawDesignToCanvas(beads);
 
-    const imageData = canvas.toDataURL("image/jpeg", 0.8);
+    const userId = localStorage.getItem("userId"); // 🔥 important
 
-    const response = await fetch("http://localhost:5000/api/save-design", {
+    await fetch("http://localhost:5000/api/save-design", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        image: imageData,   // ✅ this is what you'll display
-        design: designData  // optional (for editing later)
+         image: imageData,
+         userId,
+         material: "Custom",
+         ageGroup: "18",
+         color: "Custom",
+         occasion: "None",
+         description: "Canvas Design",
+         status: "Pending"
       }),
     });
-
-    const data = await response.json();
-    console.log(data);
 
     alert("Design saved successfully!");
 
@@ -121,8 +135,6 @@ const saveDesign = async () => {
     console.log(error);
   }
 };
-
-
   return (
     <div className="canvas-area">
 
@@ -134,8 +146,7 @@ const saveDesign = async () => {
         }}
         className={`bracelet-area ${isOver ? "droppable" : ""}`}
       >
-        {/* ONLY THIS gets captured */}
-        <div ref={designRef}>
+        <div>
           
           {selectedString.name === "Flower Bracelet" && (
             <FlowerBracelet
@@ -148,27 +159,22 @@ const saveDesign = async () => {
 
           {selectedString.name === "Custom Design" && (
             <CustomBracelet
-               beads={beads}
-               setBeads={setBeads}
-               positions={positions}
-               setPositions={setPositions}
-                selectedBeadIndex={selectedBeadIndex}
-                setSelectedBeadIndex={setSelectedBeadIndex}
-/>
-            
+              beads={beads}
+              setBeads={setBeads}
+              positions={positions}
+              setPositions={setPositions}
+              selectedBeadIndex={selectedBeadIndex}
+              setSelectedBeadIndex={setSelectedBeadIndex}
+            />
           )}
-
         </div>
       </div>
-
 
       {/* Buttons */}
       <div className="button-group">
         <button onClick={saveDesign}>
           Save Design
         </button>
-
-        
 
         <button onClick={() => navigate("/saved-designs")}>
           View Saved Designs

@@ -25,14 +25,6 @@ function DesignerPage() {
       <div className="topbar">
         <h2>Bead Aura</h2>
 
-        <div className="top-actions">
-          <button onClick={() => setBeads([])}>
-            Reset
-          </button>
-
-          <button>Preview</button>
-          <button>Save</button>
-        </div>
       </div>
 
       {/* Main Layout */}
