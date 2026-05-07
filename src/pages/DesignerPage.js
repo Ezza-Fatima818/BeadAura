@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Palette from "./Palette";
+import Palette from "../components/Palette";
 import DesignPage from "./DesignPage";
 import PropertiesPanel from "../components/PropertiesPanel";
 import "./DesignerPage.css";
@@ -22,10 +22,7 @@ function DesignerPage() {
   return (
     <div className="designer-page">
       {/* Top Bar */}
-      <div className="topbar">
-        <h2>Bead Aura</h2>
-
-      </div>
+      
 
       {/* Main Layout */}
       <div className="designer-container">
@@ -51,15 +48,7 @@ function DesignerPage() {
         </div>
 
         {/* RIGHT - Properties */}
-        <div className="properties">
-          <PropertiesPanel
-            selectedBead={selectedBead}
-            selectedBeadIndex={
-              selectedBeadIndex
-            }
-            setBeads={setBeads}
-          />
-        </div>
+        
 
       </div>
     </div>

@@ -42,7 +42,8 @@
 
 /* Right */
 .properties {
-  width: 260px;
+   width: 500px;
+  height: 100vh;
   border-left: 1px solid #eee;
   padding: 15px;
 }
@@ -63,4 +64,9 @@
 /* Size UI */
 .size-group button {
   margin-right: 8px;
+}
+.properties-panel {
+  width: 250px;
+  background: white;
+  border-left: 1px solid #ddd;
 }

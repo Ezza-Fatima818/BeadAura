@@ -1,0 +1,310 @@
+/* ===== PALETTE ===== */
+.palette {
+  width: 250px;
+  min-width: 250px;
+
+  background: white;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  border-right: 1px solid #eee;
+
+  align-self: stretch;
+
+  min-height: 100vh;
+
+  overflow-y: auto;
+}
+
+/* ===== TITLE ===== */
+.palette-title {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #8e44ad;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* ===== SECTION ===== */
+.section {
+  margin-bottom: 25px;
+}
+
+/* ===== BUTTON GROUP ===== */
+.category-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* ===== BUTTON STYLE ===== */
+.category-btn {
+  background: #faf7ff;
+  border: 1px solid #e5d8ff;
+  color: #6a1b9a;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.25s ease;
+}
+
+/* Hover */
+.category-btn:hover {
+  background: linear-gradient(135deg, #b388ff, #8e44ad);
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* Active */
+.category-btn.active {
+  background: linear-gradient(135deg, #8e44ad, #6a1b9a);
+  color: white;
+  box-shadow: 0px 3px 10px rgba(140, 80, 200, 0.3);
+}
+
+/* ===== BEADS GRID ===== */
+
+
+/* ===== VIEW MORE ===== */
+.view-more-btn {
+  margin-top: 12px;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: #b388ff;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.view-more-btn:hover {
+  background: #9c6bff;
+}
+/* Grid Layout */
+.beadGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  justify-items: center;
+  padding: 10px;
+}
+
+/* Bead container */
+.beadItem {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+/* Image */
+.beadItem img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover zoom */
+.beadItem:hover img {
+  transform: scale(1.6);
+  z-index: 10;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+/* Name tooltip */
+.beadName {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  background: black;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 6px;
+  opacity: 0;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+/* Show name */
+.beadItem:hover .beadName {
+  opacity: 1;
+}
+/* ===== SHAPE GRID ===== */
+
+.shape-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 16px;
+
+  margin-top: 15px;
+}
+
+/* ===== SHAPE CARD ===== */
+
+.shape-icon-card {
+  position: relative;
+
+  width: 60px;
+  height: 60px;
+
+  background: #faf7ff;
+
+  border: 1px solid #e5d8ff;
+
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition: 0.25s;
+}
+
+.shape-icon-card:hover {
+  transform: scale(1.08);
+
+  background: linear-gradient(135deg, #b388ff, #8e44ad);
+}
+
+/* ===== TOOLTIP ===== */
+
+.shape-tooltip {
+  position: absolute;
+
+  bottom: -28px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  background: black;
+
+  color: white;
+
+  padding: 4px 8px;
+
+  border-radius: 6px;
+
+  font-size: 11px;
+
+  opacity: 0;
+
+  transition: 0.25s;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+}
+
+.shape-icon-card:hover .shape-tooltip {
+  opacity: 1;
+}
+
+/* ===== SHAPE ICON BASE ===== */
+
+.shape-icon {
+  width: 26px;
+  height: 26px;
+
+  background: #8e44ad;
+}
+
+/* ===== ROUND ===== */
+
+.shape-icon.circle {
+  border-radius: 50%;
+}
+
+/* ===== OVAL ===== */
+
+.shape-icon.oval {
+  border-radius: 50%;
+  width: 34px;
+  height: 22px;
+}
+
+/* ===== CUBE ===== */
+
+.shape-icon.cube {
+  border-radius: 4px;
+}
+
+/* ===== TEARDROP ===== */
+
+.shape-icon.teardrop {
+  width: 22px;
+  height: 30px;
+
+  border-radius: 50% 50% 50% 0;
+
+  transform: rotate(45deg);
+}
+
+/* ===== DONUT ===== */
+
+.shape-icon.donut {
+  width: 30px;
+  height: 30px;
+
+  border: 7px solid #8e44ad;
+
+  background: transparent;
+
+  border-radius: 50%;
+}
+
+/* ===== COIN ===== */
+
+.shape-icon.coin {
+  width: 32px;
+  height: 18px;
+
+  border-radius: 50%;
+}
+
+/* ===== CYLINDER ===== */
+
+.shape-icon.cylinder {
+  width: 18px;
+  height: 32px;
+
+  border-radius: 10px;
+}
+
+/* ===== OCTAGON ===== */
+
+.shape-icon.octagon {
+  clip-path: polygon(
+    30% 0%,
+    70% 0%,
+    100% 30%,
+    100% 70%,
+    70% 100%,
+    30% 100%,
+    0% 70%,
+    0% 30%
+  );
+}
+
+/* ===== BICONE ===== */
+
+.shape-icon.bicone {
+  clip-path: polygon(
+    50% 0%,
+    100% 50%,
+    50% 100%,
+    0% 50%
+  );
+}

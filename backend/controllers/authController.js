@@ -85,6 +85,7 @@ exports.login = async (req, res) => {
     });
 
   } catch (err) {
+      console.error("LOGIN ERROR:", err);
     res.status(500).json({ message: err.message });
   }
 };

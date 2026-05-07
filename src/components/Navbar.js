@@ -26,12 +26,7 @@ function Navbar() {
           Login
         </button>
 
-        <button
-          className="signup"
-          onClick={() => navigate("/signup")}
-        >
-          Sign Up
-        </button>
+        
 
       </div>
 

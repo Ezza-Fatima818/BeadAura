@@ -2,16 +2,17 @@ import { useDrop } from "react-dnd";
 
 function DropPlaceholder({ index, pos, handleDrop }) {
   const [{ isOver }, drop] = useDrop(() => ({
-    accept: "BEAD",
+  accept: "BEAD",
 
-    drop: (item) => {
-      handleDrop(index, item.src, item.color, item.size);
-    },
+  drop: (item) => {
+    handleDrop(index, item, pos);
+  },
 
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-    }),
-  }));
+  collect: (monitor) => ({
+    isOver: !!monitor.isOver(),
+  }),
+}));
+ 
 
   return (
     <div
@@ -33,32 +34,44 @@ export default function FlowerBracelet({
   selectedBeadIndex,
   setSelectedBeadIndex,
 }) {
-  const flowerPattern = [];
+const flowerPattern = [];
 
-  const centerX = 300;
-  const centerY = 280;
-  const radius = 210;
-  const totalPoints = 20;
+const centerX = 400;
+const centerY = 400;
 
-  for (let i = 0; i < totalPoints; i++) {
-    const angle = (i / totalPoints) * 2 * Math.PI;
+const totalPoints = 20;
 
-    if (i % 4 === 0) {
-      const flowerDistance = radius + 55;
 
-      flowerPattern.push({
-        type: "flower",
-        x: centerX + flowerDistance * Math.cos(angle),
-        y: centerY + flowerDistance * Math.sin(angle),
-      });
-    } else {
-      flowerPattern.push({
-        type: "bead",
-        x: centerX + radius * Math.cos(angle),
-        y: centerY + radius * Math.sin(angle),
-      });
-    }
+
+const baseRadius = 180;
+
+for (let i = 0; i < totalPoints; i++) {
+  const angle = (i / totalPoints) * 2 * Math.PI;
+
+  const bead = beads[i];
+
+  const sizeOffset =
+    bead?.size === "large" ? 35 :
+    bead?.size === "small" ? -10 : 0;
+
+  const dynamicRadius = baseRadius + sizeOffset;
+
+  if (i % 4 === 0) {
+    const flowerDistance = dynamicRadius + 55;
+
+    flowerPattern.push({
+      type: "flower",
+      x: centerX + flowerDistance * Math.cos(angle),
+      y: centerY + flowerDistance * Math.sin(angle),
+    });
+  } else {
+    flowerPattern.push({
+      type: "bead",
+      x: centerX + dynamicRadius * Math.cos(angle),
+      y: centerY + dynamicRadius * Math.sin(angle),
+    });
   }
+}
 
   const createFlowerPetals = (cx, cy) => {
     const petals = [{ x: cx, y: cy }];
@@ -89,16 +102,19 @@ export default function FlowerBracelet({
   });
 
   // ✅ FIXED
- const handleDrop = (index, src, color, size) => {
+ const handleDrop = (index, item, pos) => {
   setBeads((prev) => ({
     ...prev,
     [index]: {
-      src,
-      color,
-      size,
+      src: item.src,
+      type: item.type,
+      material: item.material,
+      size: item.size,
+      x: pos.x,
+      y: pos.y,
       hue: 0,
       brightness: 1
-    },
+    }
   }));
 };
 
@@ -157,22 +173,20 @@ export default function FlowerBracelet({
             <img
               src={bead.src}
               alt="bead"
-               style={{
-               width: "100%",
-               height: "100%",
-              borderRadius: "50%",
-               filter: `brightness(${bead.brightness || 1})`
-               
-              
-  }}
-              
+              style={{
+  width: "100%",
+  height: "100%",
+  borderRadius: "50%",
 
-              
-
-              
-               
-              
-            />
+  filter:
+    bead.type === "component"
+      ? "none"   // 🔥 IMPORTANT
+      : `brightness(${bead.brightness || 1})
+         sepia(1)
+         saturate(5)
+         hue-rotate(${bead.hue || 0}deg)`
+}}
+      />
 
             {bead.color && (
               <div

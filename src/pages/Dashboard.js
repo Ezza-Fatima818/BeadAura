@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Palette from "./Palette";
+import Palette from "../components/Palette";
 import Canvas from "./Canvas";
 
 const Dashboard = () => {

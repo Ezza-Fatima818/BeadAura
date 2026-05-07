@@ -9,7 +9,7 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
@@ -24,13 +24,27 @@ const Login = () => {
     const data = await res.json();
 
     if (res.ok) {
+      // ✅ Store data
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.setItem("userId", data.user._id); // 🔥 ADD THIS
+      localStorage.setItem("userId", data.user._id);
 
       alert("Login successful");
 
-      navigate("/designer"); // or "/" if your home route is "/"
+      // 🎯 ROLE-BASED REDIRECTION
+      const role = data.user.role;
+
+      if (role === "admin") {
+        navigate("/admin");
+      } 
+      else if (role === "customer") {
+        navigate("/designer");
+      } 
+      else {
+        // 🚫 Seller blocked on web
+        alert("incorrect credentials");
+      }
+
     } else {
       alert(data.message);
     }
