@@ -1,208 +1,648 @@
 import { useDrop } from "react-dnd";
 
-function DropPlaceholder({ index, pos, handleDrop }) {
-  const [{ isOver }, drop] = useDrop(() => ({
-  accept: "BEAD",
+import {
+  useEffect,
+  useState,
+} from "react";
 
-  drop: (item) => {
-    handleDrop(index, item, pos);
-  },
+import useDragElement
+from "../../hooks/useDragElement";
 
-  collect: (monitor) => ({
-    isOver: !!monitor.isOver(),
-  }),
-}));
- 
+import useResizeElement
+from "../../hooks/useResizeElement";
+
+/* =================================
+   DROP PLACEHOLDER
+================================= */
+
+function DropPlaceholder({
+  placeholder,
+  index,
+  handleDrop,
+
+  selectedPlaceholder,
+  setSelectedPlaceholder,
+
+  setDraggingId,
+
+  setResizingPlaceholderId,
+
+  resizingPlaceholderId,
+}) {
+
+  const [{ isOver }, drop] =
+    useDrop(() => ({
+      accept: "BEAD",
+
+      drop: (item) => {
+
+        handleDrop(
+          index,
+          item,
+          placeholder
+        );
+      },
+
+      collect: (monitor) => ({
+        isOver:
+          !!monitor.isOver(),
+      }),
+    }));
 
   return (
     <div
       ref={drop}
-      className={`placeholder-bead ${
-        isOver ? "active-placeholder" : ""
-      }`}
-      style={{
-        left: pos.x,
-        top: pos.y,
+
+      onMouseDown={(e) => {
+
+        e.stopPropagation();
+
+        if (
+          resizingPlaceholderId !==
+          null
+        )
+          return;
+
+        setDraggingId(
+          placeholder.id
+        );
+
+        setSelectedPlaceholder(
+          placeholder
+        );
       }}
-    />
+
+      className={`placeholder-bead ${
+        isOver
+          ? "active-placeholder"
+          : ""
+      }`}
+
+      style={{
+        position: "absolute",
+
+        left: placeholder.x,
+
+        top: placeholder.y,
+
+        width: placeholder.size,
+
+        height: placeholder.size,
+
+        transform:
+          "translate(-50%, -50%)",
+
+        borderRadius: "50%",
+
+        border:
+          selectedPlaceholder?.id ===
+          placeholder.id
+            ? "2px solid gold"
+            : "2px dashed #b388ff",
+
+        cursor: "move",
+
+        zIndex: 5,
+      }}
+    >
+
+      {/* RESIZE HANDLE */}
+
+      {selectedPlaceholder?.id ===
+        placeholder.id && (
+
+        <div
+          onMouseDown={(e) => {
+
+            e.stopPropagation();
+
+            setDraggingId(null);
+
+            setResizingPlaceholderId(
+              placeholder.id
+            );
+          }}
+
+          style={{
+            position: "absolute",
+
+            right: -8,
+
+            bottom: -8,
+
+            width: 18,
+
+            height: 18,
+
+            borderRadius: "50%",
+
+            background: "#7c3aed",
+
+            cursor: "nwse-resize",
+
+            zIndex: 100,
+          }}
+        />
+      )}
+
+    </div>
   );
 }
 
+/* =================================
+   MAIN COMPONENT
+================================= */
+
 export default function FlowerBracelet({
+
   beads,
   setBeads,
+
   selectedBeadIndex,
   setSelectedBeadIndex,
+
+  selectedPlaceholder,
+  setSelectedPlaceholder,
+
+  placeholders,
+  setPlaceholders,
 }) {
-const flowerPattern = [];
 
-const centerX = 400;
-const centerY = 400;
+  /* =================================
+     STATES
+  ================================= */
 
-const totalPoints = 20;
+  const [draggingId,
+    setDraggingId] =
+    useState(null);
 
+  const [
+    resizingPlaceholderId,
+    setResizingPlaceholderId
+  ] = useState(null);
 
+  /* =================================
+     HOOKS
+  ================================= */
 
-const baseRadius = 180;
+  const { dragElement } =
+    useDragElement(
+      placeholders,
+      setPlaceholders
+    );
 
-for (let i = 0; i < totalPoints; i++) {
-  const angle = (i / totalPoints) * 2 * Math.PI;
+  const { resizeElement } =
+    useResizeElement(
+      placeholders,
+      setPlaceholders
+    );
 
-  const bead = beads[i];
+  /* =================================
+     GENERATE TEMPLATE
+  ================================= */
 
-  const sizeOffset =
-    bead?.size === "large" ? 35 :
-    bead?.size === "small" ? -10 : 0;
+  useEffect(() => {
 
-  const dynamicRadius = baseRadius + sizeOffset;
+    if (
+      placeholders.length > 0
+    )
+      return;
 
-  if (i % 4 === 0) {
-    const flowerDistance = dynamicRadius + 55;
+    const generated = [];
 
-    flowerPattern.push({
-      type: "flower",
-      x: centerX + flowerDistance * Math.cos(angle),
-      y: centerY + flowerDistance * Math.sin(angle),
-    });
-  } else {
-    flowerPattern.push({
-      type: "bead",
-      x: centerX + dynamicRadius * Math.cos(angle),
-      y: centerY + dynamicRadius * Math.sin(angle),
-    });
-  }
-}
+    const centerX = 400;
 
-  const createFlowerPetals = (cx, cy) => {
-    const petals = [{ x: cx, y: cy }];
-    const r = 30;
+    const centerY = 400;
 
-    for (let i = 0; i < 5; i++) {
-      const angle = (i / 5) * 2 * Math.PI;
+    const totalPoints = 20;
 
-      petals.push({
-        x: cx + r * Math.cos(angle),
-        y: cy + r * Math.sin(angle),
-      });
+    const baseRadius = 180;
+
+    const createFlowerPetals =
+      (
+        cx,
+        cy
+      ) => {
+
+        const petals = [
+          {
+            x: cx,
+            y: cy,
+          },
+        ];
+
+        const r = 30;
+
+        for (
+          let i = 0;
+          i < 5;
+          i++
+        ) {
+
+          const angle =
+            (i / 5) *
+            2 *
+            Math.PI;
+
+          petals.push({
+            x:
+              cx +
+              r *
+                Math.cos(
+                  angle
+                ),
+
+            y:
+              cy +
+              r *
+                Math.sin(
+                  angle
+                ),
+          });
+        }
+
+        return petals;
+      };
+
+    for (
+      let i = 0;
+      i < totalPoints;
+      i++
+    ) {
+
+      const angle =
+        (i / totalPoints) *
+        2 *
+        Math.PI;
+
+      const x =
+        centerX +
+        baseRadius *
+          Math.cos(
+            angle
+          );
+
+      const y =
+        centerY +
+        baseRadius *
+          Math.sin(
+            angle
+          );
+
+      if (
+        i % 4 === 0
+      ) {
+
+        const flowerDistance =
+          baseRadius + 55;
+
+        const flowerX =
+          centerX +
+          flowerDistance *
+            Math.cos(
+              angle
+            );
+
+        const flowerY =
+          centerY +
+          flowerDistance *
+            Math.sin(
+              angle
+            );
+
+        createFlowerPetals(
+          flowerX,
+          flowerY
+        ).forEach((p) => {
+
+          generated.push({
+            id:
+              Date.now() +
+              Math.random(),
+
+            x: p.x,
+
+            y: p.y,
+
+            size: 40,
+          });
+        });
+
+      } else {
+
+        generated.push({
+          id:
+            Date.now() +
+            Math.random(),
+
+          x,
+
+          y,
+
+          size: 40,
+        });
+      }
     }
 
-    return petals;
+    setPlaceholders(
+      generated
+    );
+
+ }, [
+  placeholders.length,
+  setPlaceholders,
+]);
+
+  /* =================================
+     HANDLE DROP
+  ================================= */
+
+  const handleDrop = (
+    index,
+    item,
+    pos
+  ) => {
+
+    setBeads((prev) => ({
+      ...prev,
+
+      [pos.id]: {
+
+        src: item.src,
+
+        type: item.type,
+
+        material:
+          item.material,
+
+        x: pos.x,
+
+        y: pos.y,
+
+        hue: 0,
+
+        brightness: 1,
+
+        rotation: 0,
+      },
+    }));
   };
 
-  const allPlaceholders = [];
+  /* =================================
+     DRAG + RESIZE
+  ================================= */
 
-  flowerPattern.forEach((item) => {
-    if (item.type === "flower") {
-      createFlowerPetals(item.x, item.y).forEach((p) =>
-        allPlaceholders.push(p)
+  useEffect(() => {
+
+    const handleMouseMove =
+      (e) => {
+
+        const rect =
+          document
+            .querySelector(
+              ".bracelet-area"
+            )
+            ?.getBoundingClientRect();
+
+        if (!rect)
+          return;
+
+        const x =
+          e.clientX -
+          rect.left;
+
+        const y =
+          e.clientY -
+          rect.top;
+
+        /* DRAG */
+
+        if (
+          draggingId !== null
+        ) {
+
+          dragElement(
+            draggingId,
+            x,
+            y
+          );
+        }
+
+        /* PLACEHOLDER RESIZE */
+
+        if (
+          resizingPlaceholderId !==
+          null
+        ) {
+
+          resizeElement(
+            resizingPlaceholderId,
+
+            Math.max(
+              20,
+              x / 5
+            )
+          );
+        }
+      };
+
+    const handleMouseUp =
+      () => {
+
+        setDraggingId(null);
+
+        setResizingPlaceholderId(
+          null
+        );
+      };
+
+    window.addEventListener(
+      "mousemove",
+      handleMouseMove
+    );
+
+    window.addEventListener(
+      "mouseup",
+      handleMouseUp
+    );
+
+    return () => {
+
+      window.removeEventListener(
+        "mousemove",
+        handleMouseMove
       );
-    } else {
-      allPlaceholders.push(item);
-    }
-  });
 
-  // ✅ FIXED
- const handleDrop = (index, item, pos) => {
-  setBeads((prev) => ({
-    ...prev,
-    [index]: {
-      src: item.src,
-      type: item.type,
-      material: item.material,
-      size: item.size,
-      x: pos.x,
-      y: pos.y,
-      hue: 0,
-      brightness: 1
-    }
-  }));
-};
+      window.removeEventListener(
+        "mouseup",
+        handleMouseUp
+      );
+    };
+
+  }, [
+    draggingId,
+
+  resizingPlaceholderId,
+
+  dragElement,
+
+  resizeElement,
+  ]);
+
+  /* =================================
+     UI
+  ================================= */
 
   return (
     <>
-      {/* Placeholders */}
-      {allPlaceholders.map((pos, index) => (
-        <DropPlaceholder
-          key={index}
-          index={index}
-          pos={pos}
-          handleDrop={handleDrop}
-        />
-      ))}
 
-      {/* Beads */}
-      {Object.entries(beads || {}).map(([index, bead]) => {
-        const i = Number(index);
-        const position = allPlaceholders[i];
+      {/* PLACEHOLDERS */}
 
-        if (!bead || !position) return null;
+      {placeholders.map(
+        (
+          placeholder,
+          index
+        ) => (
 
-        return (
-          <div
-            key={i}
-            onClick={(e) => {
-              e.stopPropagation();
-              setSelectedBeadIndex(i);
-            }}
-            style={{
-              position: "absolute",
-              left: position.x,
-              top: position.y,
-              transform: "translate(-50%, -50%)",
-              width:
-                bead.size === "large"
-                  ? 55
-                  : bead.size === "small"
-                  ? 25
-                  : 35,
-              height:
-                bead.size === "large"
-                  ? 55
-                  : bead.size === "small"
-                  ? 25
-                  : 35,
-              border:
-                selectedBeadIndex === i
-                  ? "2px solid gold"
-                  : "none",
-              borderRadius: "50%",
-              cursor: "pointer",
-              zIndex: 10,
-            }}
-          >
-            <img
-              src={bead.src}
-              alt="bead"
+          <DropPlaceholder
+            key={placeholder.id}
+
+            index={index}
+
+            placeholder={
+              placeholder
+            }
+
+            handleDrop={
+              handleDrop
+            }
+
+            selectedPlaceholder={
+              selectedPlaceholder
+            }
+
+            setSelectedPlaceholder={
+              setSelectedPlaceholder
+            }
+
+            setDraggingId={
+              setDraggingId
+            }
+
+            setResizingPlaceholderId={
+              setResizingPlaceholderId
+            }
+
+            resizingPlaceholderId={
+              resizingPlaceholderId
+            }
+          />
+        )
+      )}
+
+      {/* BEADS */}
+
+      {Object.entries(
+        beads || {}
+      ).map(
+        ([index, bead]) => {
+
+          const position =
+            placeholders.find(
+              (p) =>
+                p.id ===
+                Number(index)
+            );
+
+          if (
+            !bead ||
+            !position
+          )
+            return null;
+
+          return (
+            <div
+              key={index}
+
+              onClick={(e) => {
+
+                e.stopPropagation();
+
+                setSelectedBeadIndex(
+                  index
+                );
+              }}
+
               style={{
-  width: "100%",
-  height: "100%",
-  borderRadius: "50%",
+                position:
+                  "absolute",
 
-  filter:
-    bead.type === "component"
-      ? "none"   // 🔥 IMPORTANT
-      : `brightness(${bead.brightness || 1})
-         sepia(1)
-         saturate(5)
-         hue-rotate(${bead.hue || 0}deg)`
-}}
-      />
+                left:
+                  position.x,
 
-            {bead.color && (
-              <div
+                top:
+                  position.y,
+
+                width:
+  position.size - 4,
+
+height:
+  position.size - 4,
+
+                transform: `
+                  translate(-50%, -50%)
+                  rotate(${bead.rotation || 0}deg)
+                `,
+
+                border:
+                  selectedBeadIndex ===
+                  index
+                    ? "2px solid gold"
+                    : "none",
+
+                borderRadius:
+                  "50%",
+
+                cursor:
+                  "pointer",
+
+                zIndex: 50,
+              }}
+            >
+
+              <img
+                src={bead.src}
+
+                alt="bead"
+
                 style={{
-                  position: "absolute",
-                  inset: 0,
-                  backgroundColor: bead.color,
-                  mixBlendMode: "multiply",
-                  borderRadius: "50%",
-                  pointerEvents: "none",
+                  width: "100%",
+
+                  height: "100%",
+
+                  borderRadius:
+                    "50%",
+
+                  objectFit:
+                    "fill",
+
+                  filter:
+                    bead.type ===
+                    "component"
+                      ? "none"
+                      : `
+                        brightness(${bead.brightness || 1})
+                        sepia(1)
+                        saturate(5)
+                        hue-rotate(${bead.hue || 0}deg)
+                      `,
                 }}
               />
-            )}
-          </div>
-        );
-      })}
+
+            </div>
+          );
+        }
+      )}
     </>
   );
 }

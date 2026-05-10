@@ -1,31 +1,40 @@
+// Hero.jsx
+
 import React from "react";
 import "./Hero.css";
-import bracelet from "../assets/bracelet.png";
 
 function Hero() {
   return (
     <section className="hero">
-         <div className="floating bead1"></div>
-  <div className="floating bead2"></div>
-      
+
+      <div className="floating bead1"></div>
+      <div className="floating bead2"></div>
+
       <div className="hero-left">
-        <img src={bracelet} alt="Beaded bracelet" />
+        <img
+          src={require("../assets/bracelet.png")}
+          alt="bracelet"
+        />
       </div>
 
       <div className="hero-right">
         <h1>
-          Design your own <br />
-          <span>custom jewelry</span>
+          Create Your Own
+          <br />
+          <span>Luxury Jewelry</span>
         </h1>
 
         <p>
-          Create beautiful beaded jewelry by choosing your own colors,
-          patterns, and wire styles.
+          Design personalized bracelets and jewelry
+          with our modern customization studio.
+          Create elegant pieces that reflect your
+          unique style.
         </p>
 
-        <button className="cta">Start Designing</button>
+        <button className="cta">
+          Start Designing
+        </button>
       </div>
-   
     </section>
   );
 }

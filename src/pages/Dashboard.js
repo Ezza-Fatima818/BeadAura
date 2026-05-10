@@ -1,33 +1,247 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Palette from "../components/Palette";
-import Canvas from "./Canvas";
+// Dashboard.jsx
 
-const Dashboard = () => {
-  const navigate = useNavigate();
+import React from "react";
+import "./Dashboard.css";
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
+import {
+  Gem,
+  Palette,
+  Heart,
+  User,
+  LogOut,
+} from "lucide-react";
 
-    if (!token) {
-      navigate("/login");
-    }
-  }, [navigate]);
+import bracelet from "../assets/bracelet.png";
 
-  const user = JSON.parse(localStorage.getItem("user"));
-
+function Dashboard() {
   return (
-    <div className="app-container">
-      {/* You must import these or define them */}
-      {/* <Palette />
-      <Canvas /> */}
-      
-      <h1>Welcome Dashboard</h1>
-      {user && <p>Hello, {user.name}</p>}
-      <Palette />
-      <Canvas />
+
+    <div className="dashboard">
+
+      {/* SIDEBAR */}
+
+      <div className="sidebar">
+
+        <div className="sidebar-logo">
+          BeadAura <span>●</span>
+        </div>
+
+        <div className="sidebar-menu">
+
+          <div className="menu-item active">
+            <Gem size={20} />
+            <span>Dashboard</span>
+          </div>
+
+          <div className="menu-item">
+            <Palette size={20} />
+            <span>Design Studio</span>
+          </div>
+
+          <div className="menu-item">
+            <Heart size={20} />
+            <span>Saved Designs</span>
+          </div>
+
+          <div className="menu-item">
+            <User size={20} />
+            <span>Profile</span>
+          </div>
+
+        </div>
+
+        <div className="logout">
+          <LogOut size={20} />
+          <span>Logout</span>
+        </div>
+
+      </div>
+
+      {/* MAIN CONTENT */}
+
+      <div className="dashboard-content">
+
+        {/* TOP */}
+
+        <div className="top-section">
+
+          <div>
+            <h1>
+              Welcome back, Ezza 👋
+            </h1>
+
+            <p>
+              Let’s create something beautiful today.
+            </p>
+          </div>
+
+          <input
+            type="text"
+            placeholder="Search designs..."
+            className="search"
+          />
+
+        </div>
+
+        {/* CREATE SECTION */}
+
+        <div className="section">
+
+          <h2>
+            What would you like to create?
+          </h2>
+
+          <div className="create-grid">
+
+            {/* CARD 1 */}
+
+            <div className="create-card">
+
+              <div className="card-content">
+
+                <h3>Create Bracelet</h3>
+
+                <p>
+                  Design your own custom
+                  bracelet with elegance.
+                </p>
+
+                <button>
+                  Start Designing
+                </button>
+
+              </div>
+
+              <img
+                src={bracelet}
+                alt="bracelet"
+              />
+
+            </div>
+
+            {/* CARD 2 */}
+
+            <div className="create-card">
+
+              <div className="card-content">
+
+                <h3>Create Necklace</h3>
+
+                <p>
+                  Craft personalized
+                  necklaces beautifully.
+                </p>
+
+                <button>
+                  Create Necklace
+                </button>
+
+              </div>
+
+              <img
+                src={bracelet}
+                alt="necklace"
+              />
+
+            </div>
+
+            {/* CARD 3 */}
+
+            <div className="create-card">
+
+              <div className="card-content">
+
+                <h3>Create Earrings</h3>
+
+                <p>
+                  Design elegant earrings
+                  with custom beads.
+                </p>
+
+                <button>
+                  Create Earrings
+                </button>
+
+              </div>
+
+              <img
+                src={bracelet}
+                alt="earrings"
+              />
+
+            </div>
+
+          </div>
+
+        </div>
+
+        {/* RECENT DESIGNS */}
+
+        <div className="section">
+
+          <div className="section-header">
+
+            <h2>Recent Designs</h2>
+
+            <span>View all</span>
+
+          </div>
+
+          <div className="recent-grid">
+
+            <div className="recent-card">
+              <img
+                src={bracelet}
+                alt=""
+              />
+
+              <h4>Pink Pearl</h4>
+
+              <p>Edited 2 days ago</p>
+            </div>
+
+            <div className="recent-card">
+              <img
+                src={bracelet}
+                alt=""
+              />
+
+              <h4>Lavender Love</h4>
+
+              <p>Edited 5 days ago</p>
+            </div>
+
+            <div className="recent-card">
+              <img
+                src={bracelet}
+                alt=""
+              />
+
+              <h4>Golden Charm</h4>
+
+              <p>Edited yesterday</p>
+            </div>
+
+            <div className="recent-card">
+              <img
+                src={bracelet}
+                alt=""
+              />
+
+              <h4>Soft Blush</h4>
+
+              <p>Edited 1 week ago</p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
+
   );
-};
+}
 
 export default Dashboard;

@@ -27,6 +27,11 @@ const reportRoutes = require("./routes/reportRoutes");
 /* 🔥 ADD THIS */
 const beadRoutes = require("./routes/beadRoutes");
 
+const designRoutes = require("./routes/designRoutes");
+
+const tripoRoutes = require("./routes/tripoRoutes");
+app.use("/api", tripoRoutes);
+
 app.use("/api/users", userRoutes);
 
 app.use("/api/orders", orderRoutes);
@@ -35,6 +40,8 @@ app.use("/api/reports", reportRoutes);
 
 /* 🔥 ADD THIS */
 app.use("/api/beads", beadRoutes);
+
+app.use("/api/designs", designRoutes);
 
 /* =========================
    DATABASE

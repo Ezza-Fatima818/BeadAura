@@ -2,27 +2,25 @@ import { useDrag } from "react-dnd";
 
 export default function Bead({
   src,
+  type,
   selectedColor,
   selectedSize
 }) {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: "BEAD",
+  const [{ isDragging }, drag] =
+  useDrag(() => ({
+    type: type || "BEAD",
 
-    item: () => {
-      console.log("Dragging started");
+    item: {
+      type: type || "BEAD",
 
-      return {
-        src,
-        color: selectedColor,
-        size: selectedSize
-      };
+      src,
     },
 
     collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
+      isDragging:
+        monitor.isDragging(),
     }),
   }));
-
   return (
     <img
       ref={drag}

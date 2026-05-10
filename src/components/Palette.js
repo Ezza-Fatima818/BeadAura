@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { jewelryComponents } from "./JewelryComponents/ComponentData";
-import ComponentItem from "./JewelryComponents/ComponentItem";
+
+import { jewelryComponents }
+from "./JewelryComponents/ComponentData";
+
+import ComponentItem
+from "./JewelryComponents/ComponentItem";
+
 import "./Palette.css";
+
 import Bead from "./Bead";
 
 export default function Palette({
@@ -13,36 +19,40 @@ export default function Palette({
   selectedString,
   selectedCategory,
   addShape,
+  handleDirectImageUpload,
 }) {
-  console.log("setTool:", setTool);
 
-  const [beads, setBeads] = useState([]);
-  const [showAllBeads, setShowAllBeads] =
+  const [beads, setBeads] =
+    useState([]);
+
+  const [showAllBeads,
+    setShowAllBeads] =
     useState(false);
 
-  const [beadCategory, setBeadCategory] =
+  const [beadCategory,
+    setBeadCategory] =
     useState("All");
 
-  const [selectedColor, setSelectedColor] =
+  const [selectedColor,
+    setSelectedColor] =
     useState("white");
 
-  const [selectedSize, setSelectedSize] =
+  const [selectedSize,
+    setSelectedSize] =
     useState("medium");
+
+  /* =================================
+     SHAPES
+  ================================= */
 
   const beadShapes = [
     { type: "circle", name: "Round" },
     { type: "oval", name: "Oval" },
     { type: "cube", name: "Cube" },
-    {
-      type: "teardrop",
-      name: "Teardrop",
-    },
+    { type: "teardrop", name: "Teardrop" },
     { type: "donut", name: "Rondelle" },
     { type: "coin", name: "Coin" },
-    {
-      type: "cylinder",
-      name: "Cylinder",
-    },
+    { type: "cylinder", name: "Cylinder" },
     { type: "octagon", name: "Octagon" },
     { type: "bicone", name: "Bicone" },
   ];
@@ -52,24 +62,36 @@ export default function Palette({
   ================================= */
 
   useEffect(() => {
-  fetch("http://localhost:5000/api/beads")
-    .then((res) => res.json())
-    .then((data) => {
-      console.log("BEADS API RESPONSE:", data);
 
-      if (Array.isArray(data)) {
-        setBeads(data);
-      } else if (Array.isArray(data.beads)) {
-        setBeads(data.beads);
-      } else {
-        setBeads([]);
-      }
-    })
-    .catch((err) => console.log(err));
-}, []);
+    fetch("http://localhost:5000/api/beads")
+      .then((res) => res.json())
+      .then((data) => {
 
-  if (!selectedCategory && mode !== "studio")
-    return null;
+        if (Array.isArray(data)) {
+          setBeads(data);
+        }
+
+        else if (
+          Array.isArray(data.beads)
+        ) {
+          setBeads(data.beads);
+        }
+
+        else {
+          setBeads([]);
+        }
+      })
+
+      .catch((err) =>
+        console.log(err)
+      );
+
+  }, []);
+
+  if (
+    !selectedCategory &&
+    mode !== "studio"
+  ) return null;
 
   /* =================================
      TEMPLATES
@@ -80,6 +102,7 @@ export default function Palette({
       name: "Flower Bracelet",
       pattern: "flower",
     },
+
     {
       name: "Custom Design",
       pattern: "custom",
@@ -89,38 +112,34 @@ export default function Palette({
   const necklaceTemplates = [
     {
       name: "Choker",
-      radius: 180,
-      slots: 18,
     },
+
     {
       name: "Pendant",
-      radius: 220,
-      slots: 22,
     },
+
     {
       name: "Layered",
-      radius: 250,
-      slots: 26,
     },
   ];
 
   const earringTemplates = [
     {
       name: "Hoop Earrings",
-      radius: 80,
-      slots: 8,
     },
+
     {
       name: "Drop Earrings",
-      radius: 100,
-      slots: 6,
     },
+
     {
       name: "Pearl Earrings",
-      radius: 70,
-      slots: 6,
     },
   ];
+
+  /* =================================
+     CATEGORIES
+  ================================= */
 
   const categories = [
     "All",
@@ -135,100 +154,85 @@ export default function Palette({
       ? beads
       : beads.filter(
           (bead) =>
-            bead.category === beadCategory
+            bead.category ===
+            beadCategory
         );
-
-  let templates = [];
-
-  if (selectedCategory === "bracelet") {
-    templates = braceletTemplates;
-  } else if (
-    selectedCategory === "necklace"
-  ) {
-    templates = necklaceTemplates;
-  } else if (
-    selectedCategory === "earrings"
-  ) {
-    templates = earringTemplates;
-  }
 
   /* =================================
      STUDIO MODE
   ================================= */
 
   if (mode === "studio") {
+
     return (
       <div className="palette">
+
         <h2 className="palette-title">
           Design Studio
         </h2>
 
         {/* TOOLS */}
+
         <div className="section">
+
           <h4>Tools</h4>
 
           <div className="category-buttons">
+
             <button
               className="category-btn"
-              onClick={() => {
-                console.log(
-                  "Pen selected"
-                );
-                setTool("pen");
-              }}
+              onClick={() =>
+                setTool("pen")
+              }
             >
               🖊 Pen
             </button>
 
             <button
               className="category-btn"
-              onClick={() => {
-                console.log(
-                  "Eraser selected"
-                );
-                setTool("eraser");
-              }}
+              onClick={() =>
+                setTool("eraser")
+              }
             >
               🧽 Eraser
             </button>
 
             <button
               className="category-btn"
-              onClick={() =>
-                console.log(
-                  "Undo clicked"
-                )
-              }
             >
               ↩ Undo
             </button>
 
             <button
               className="category-btn"
-              onClick={() =>
-                console.log(
-                  "Clear clicked"
-                )
-              }
             >
               🗑 Clear
             </button>
+
           </div>
+
         </div>
 
         {/* SHAPES */}
+
         <div className="section">
+
           <h4>Shapes</h4>
 
           <div className="shape-grid">
+
             {beadShapes.map((shape) => (
+
               <div
                 key={shape.type}
+
                 className="shape-icon-card"
+
                 onClick={() =>
                   addShape(shape.type)
                 }
               >
+
                 <div
                   className={`shape-icon ${shape.type}`}
                 ></div>
@@ -236,48 +240,68 @@ export default function Palette({
                 <span className="shape-tooltip">
                   {shape.name}
                 </span>
+
               </div>
+
             ))}
+
           </div>
+
         </div>
 
         {/* CATEGORIES */}
+
         <div className="section">
+
           <h4>Categories</h4>
 
           <div className="category-buttons">
+
             {categories.map((cat) => (
+
               <button
                 key={cat}
+
                 onClick={() =>
                   setBeadCategory(cat)
                 }
+
                 className="category-btn"
               >
                 {cat}
               </button>
+
             ))}
+
           </div>
+
         </div>
 
         {/* BEADS */}
+
         <div className="section">
+
           <h4>Select Beads</h4>
 
           <div className="beadGrid">
+
             {(showAllBeads
               ? filteredBeads
               : filteredBeads.slice(0, 6)
             ).map((bead) => (
+
               <div
                 className="beadItem"
                 key={bead._id}
               >
+
                 <Bead
                   src={bead.image}
+
                   selectedColor={
                     selectedColor
                   }
+
                   selectedSize={
                     selectedSize
                   }
@@ -286,13 +310,18 @@ export default function Palette({
                 <span className="beadName">
                   {bead.name}
                 </span>
+
               </div>
+
             ))}
+
           </div>
 
           {filteredBeads.length > 6 && (
+
             <button
               className="view-more-btn"
+
               onClick={() =>
                 setShowAllBeads(
                   !showAllBeads
@@ -303,138 +332,350 @@ export default function Palette({
                 ? "Show Less"
                 : "+ View More"}
             </button>
+
           )}
+
         </div>
 
-      
-         
+        {/* CHAINS */}
+
+<div className="section">
+
+  <h4>Chains</h4>
+
+  <div className="beadGrid">
+
+    <div className="beadItem">
+
+      <Bead
+        src="/beads/assets/chains/GoldenChain.svg"
+
+        type="CHAIN"
+      />
+
+      <span className="beadName">
+        Gold Chain
+      </span>
+
+    </div>
+
+  </div>
+
+</div>
+
+        {/* UPLOAD */}
+
+        <div className="section">
+
+          <h4>Upload Charm</h4>
+
+          <label
+            style={{
+              display: "block",
+
+              background:
+                "linear-gradient(135deg, #b388ff, #8e44ad)",
+
+              color: "white",
+
+              padding: "10px",
+
+              borderRadius: "10px",
+
+              textAlign: "center",
+
+              cursor: "pointer",
+
+              fontWeight: "500",
+            }}
+          >
+
+            Upload Image
+
+            <input
+              type="file"
+
+              accept="image/*"
+
+              hidden
+
+              multiple
+
+              onChange={
+                handleDirectImageUpload
+              }
+            />
+
+          </label>
+
+          <p
+            style={{
+              fontSize: "12px",
+
+              color: "gray",
+
+              marginTop: "8px",
+            }}
+          >
+            Upload image with removed background
+          </p>
+
+        </div>
+
       </div>
     );
   }
 
   /* =================================
-     NORMAL MODE
+     BRACELET MODE
   ================================= */
 
-  return (
-    <div className="palette">
-      <h2 className="palette-title">
-        {selectedCategory
-          ? selectedCategory
-              .charAt(0)
-              .toUpperCase() +
-            selectedCategory.slice(1)
-          : "Customization"}
-      </h2>
+  if (selectedCategory === "bracelet") {
 
-      {/* TEMPLATES */}
-      <div className="section">
-        <h4>Select Template</h4>
+    return (
+      <div className="palette">
 
-        <div className="category-buttons">
-          {templates.map((template) => (
-            <button
-              key={template.name}
-              className={`category-btn ${
-                selectedString?.name ===
-                template.name
-                  ? "active"
-                  : ""
-              }`}
-              onClick={() =>
-                setSelectedString(template)
-              }
-            >
-              {template.name}
-            </button>
-          ))}
-        </div>
-      </div>
+        <h2 className="palette-title">
+          Bracelet Builder
+        </h2>
 
-      {/* CATEGORIES */}
-      <div className="section">
-        <h4>Categories</h4>
+        {/* TEMPLATES */}
 
-        <div className="category-buttons">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() =>
-                setBeadCategory(cat)
-              }
-              className="category-btn"
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-      </div>
+        <div className="section">
 
-      {/* BEADS */}
-      <div className="section">
-        <h4>Select Beads</h4>
+          <h4>Select Template</h4>
 
-        <div className="beadGrid">
-          {(showAllBeads
-            ? filteredBeads
-            : filteredBeads.slice(0, 6)
-          ).map((bead) => (
-            <div
-              className="beadItem"
-              key={bead._id}
-            >
-              <Bead
-                src={bead.image}
-                selectedColor={
-                  selectedColor
-                }
-                selectedSize={
-                  selectedSize
-                }
-              />
+          <div className="category-buttons">
 
-              <span className="beadName">
-                {bead.name}
-              </span>
-            </div>
-          ))}
-        </div>
+            {braceletTemplates.map(
+              (template) => (
 
-        {filteredBeads.length > 6 && (
-          <button
-            className="view-more-btn"
-            onClick={() =>
-              setShowAllBeads(
-                !showAllBeads
+                <button
+                  key={template.name}
+
+                  className={`category-btn ${
+                    selectedString?.name ===
+                    template.name
+                      ? "active"
+                      : ""
+                  }`}
+
+                  onClick={() =>
+                    setSelectedString(
+                      template
+                    )
+                  }
+                >
+                  {template.name}
+                </button>
+
               )
-            }
-          >
-            {showAllBeads
-              ? "Show Less"
-              : "+ View More"}
-          </button>
-        )}
-      </div>
+            )}
 
-      {/* COMPONENTS */}
-      <div className="section">
-        <h4>Components</h4>
+          </div>
 
-        <div className="beadGrid">
-          {jewelryComponents.map((item) => (
-            <div
-              className="beadItem"
-              key={item.id}
-            >
-              <ComponentItem item={item} />
-
-              <span className="beadName">
-                {item.name}
-              </span>
-            </div>
-          ))}
         </div>
+
+        {/* CATEGORIES */}
+
+        <div className="section">
+
+          <h4>Categories</h4>
+
+          <div className="category-buttons">
+
+            {categories.map((cat) => (
+
+              <button
+                key={cat}
+
+                onClick={() =>
+                  setBeadCategory(cat)
+                }
+
+                className="category-btn"
+              >
+                {cat}
+              </button>
+
+            ))}
+
+          </div>
+
+        </div>
+
+        {/* BEADS */}
+
+        <div className="section">
+
+          <h4>Select Beads</h4>
+
+          <div className="beadGrid">
+
+            {(showAllBeads
+              ? filteredBeads
+              : filteredBeads.slice(0, 6)
+            ).map((bead) => (
+
+              <div
+                className="beadItem"
+                key={bead._id}
+              >
+
+                <Bead
+                  src={bead.image}
+
+                  selectedColor={
+                    selectedColor
+                  }
+
+                  selectedSize={
+                    selectedSize
+                  }
+                />
+
+                <span className="beadName">
+                  {bead.name}
+                </span>
+
+              </div>
+
+            ))}
+
+          </div>
+
+        </div>
+
+        {/* COMPONENTS */}
+
+        <div className="section">
+
+          <h4>Components</h4>
+
+          <div className="beadGrid">
+
+            {jewelryComponents.map(
+              (item) => (
+
+                <div
+                  className="beadItem"
+                  key={item.id}
+                >
+
+                  <ComponentItem
+                    item={item}
+                  />
+
+                  <span className="beadName">
+                    {item.name}
+                  </span>
+
+                </div>
+
+              )
+            )}
+
+          </div>
+
+        </div>
+
       </div>
-    </div>
-  );
+    );
+  }
+
+  /* =================================
+     NECKLACE MODE
+  ================================= */
+
+  if (selectedCategory === "necklace") {
+
+    return (
+      <div className="palette">
+
+        <h2 className="palette-title">
+          Necklace Builder
+        </h2>
+
+        <div className="section">
+
+          <h4>Select Template</h4>
+
+          <div className="category-buttons">
+
+            {necklaceTemplates.map(
+              (template) => (
+
+                <button
+                  key={template.name}
+
+                  className="category-btn"
+
+                  onClick={() =>
+                    setSelectedString(
+                      template
+                    )
+                  }
+                >
+                  {template.name}
+                </button>
+
+              )
+            )}
+
+          </div>
+
+        </div>
+
+      </div>
+    );
+  }
+
+  /* =================================
+     EARRING MODE
+  ================================= */
+
+  if (selectedCategory === "earrings") {
+
+    return (
+      <div className="palette">
+
+        <h2 className="palette-title">
+          Earrings Builder
+        </h2>
+
+        <div className="section">
+
+          <h4>Select Template</h4>
+
+          <div className="category-buttons">
+
+            {earringTemplates.map(
+              (template) => (
+
+                <button
+                  key={template.name}
+
+                  className="category-btn"
+
+                  onClick={() =>
+                    setSelectedString(
+                      template
+                    )
+                  }
+                >
+                  {template.name}
+                </button>
+
+              )
+            )}
+
+          </div>
+
+        </div>
+
+      </div>
+    );
+  }
+
+  return null;
 }

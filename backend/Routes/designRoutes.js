@@ -1,93 +1,113 @@
 const express = require("express");
 const router = express.Router();
-const fs = require("fs");
-const path = require("path");
 
 const Design = require("../models/Design");
 
-// ✅ Save design
-router.post("/save-design", async (req, res) => {
-  try {
-     console.log("Incoming body:", req.body);
-    const {
-      image,
-      userId,
-      material = "Custom",
-      ageGroup = "18",
-      color = "Custom",
-      occasion = "None",
-      description = "Canvas Design",
-      status = "Pending"
-    } = req.body;
+// ✅ IMPORTANT
+const upload = require("../middleware/upload");
 
-    // 🚨 Check userId
-    if (!userId) {
-      return res.status(400).json({ error: "UserId is required" });
-    }
+/* =========================
+   SAVE DESIGN
+========================= */
 
-    // 🔥 Detect image type (jpg/png/etc)
-    const matches = image.match(/^data:image\/(\w+);base64,/);
-    const extension = matches ? matches[1] : "jpg";
+router.post(
+  "/save-design",
+  upload.single("designImage"),
 
-    // 🔥 Remove base64 prefix
-    const base64Data = image.replace(/^data:image\/\w+;base64,/, "");
-
-    // 🔥 Ensure uploads folder exists
-    const uploadPath = path.join(__dirname, "../uploads");
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath);
-    }
-
-    // 🔥 Create file
-    const fileName = `${Date.now()}.${extension}`;
-    const fullPath = path.join(uploadPath, fileName);
-
-    // 🔥 Save file
-    fs.writeFileSync(fullPath, base64Data, "base64");
-
-    // 🔥 Save in MongoDB
-    const newDesign = new Design({
-      userId,
-      material,
-      ageGroup,
-      color,
-      occasion,
-      description,
-      status,
-      imageUrl: "/uploads/" + fileName, // ✅ FIXED
-    });
+  async (req, res) => {
 
     try {
-  await newDesign.save();
-  console.log("Saved to MongoDB:", newDesign);
-} catch (dbError) {
-  console.error("MongoDB save error:", dbError);
-}
 
-    res.json({
-      message: "Design saved successfully",
-      design: newDesign,
-    });
+      console.log("BODY:", req.body);
+      console.log("FILE:", req.file);
 
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
+      // ✅ check image upload
+      if (!req.file) {
+        return res.status(400).json({
+          error: "Image upload failed",
+        });
+      }
+
+      const {
+        userId,
+        material = "Custom",
+        ageGroup = "18",
+        color = "Custom",
+        occasion = "None",
+        description = "Canvas Design",
+      } = req.body;
+
+      // ✅ user required
+      if (!userId) {
+        return res.status(400).json({
+          error: "UserId is required",
+        });
+      }
+
+      // ✅ save design
+      const newDesign = new Design({
+        userId,
+        material,
+        ageGroup,
+        color,
+        occasion,
+        description,
+
+        // cloudinary
+        imageUrl: req.file.path,
+        publicId: req.file.filename,
+
+        // auto pending
+        status: "Pending",
+      });
+
+      await newDesign.save();
+
+      res.json({
+        success: true,
+        message: "Design saved successfully",
+        design: newDesign,
+      });
+
+    } catch (err) {
+
+      console.error("SAVE DESIGN ERROR:", err);
+
+      res.status(500).json({
+        success: false,
+        error: err.message,
+      });
+    }
   }
-});
+);
 
+/* =========================
+   GET USER SAVED DESIGNS
+========================= */
 
-// ✅ Get designs (USER SPECIFIC)
-router.get("/saved-designs/:userId", async (req, res) => {
-  try {
-   
-    const designs = await Design.find({
-      userId: req.params.userId,
-    });
+router.get(
+  "/saved-designs/:userId",
 
-    res.json(designs);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+  async (req, res) => {
+
+    try {
+
+      const designs =
+        await Design.find({
+          userId: req.params.userId,
+        });
+
+      res.json(designs);
+
+    } catch (err) {
+
+      console.error(err);
+
+      res.status(500).json({
+        error: err.message,
+      });
+    }
   }
-});
+);
 
 module.exports = router;

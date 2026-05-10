@@ -1,32 +1,78 @@
 import "./TopBar.css";
 
-export default function TopBar({ setMode, navigate }) {
+export default function TopBar({
+  setMode,
+  setSelectedCategory,
+  navigate,
+}) {
+
   return (
+
     <div className="top-bar">
 
-      <div className="logo">BeadAura</div>
+      <div className="logo">
+        BeadAura
+      </div>
 
       <div className="categories">
 
-        <span onClick={() => setMode("bracelet")}>
+        {/* BRACELETS */}
+
+        <span
+          onClick={() => {
+
+            setMode("template");
+
+            setSelectedCategory(
+              "bracelet"
+            );
+          }}
+        >
           Bracelets
         </span>
 
-        <span onClick={() => setMode("necklace")}>
+        {/* NECKLACES */}
+
+        <span
+          onClick={() => {
+
+            setMode("template");
+
+            setSelectedCategory(
+              "necklace"
+            );
+          }}
+        >
           Necklaces
         </span>
 
-        <span onClick={() => setMode("earrings")}>
+        {/* EARRINGS */}
+
+        <span
+          onClick={() => {
+
+            setMode("template");
+
+            setSelectedCategory(
+              "earrings"
+            );
+          }}
+        >
           Earrings
         </span>
 
-        {/* ✅ FIXED */}
-        <span 
+        {/* DESIGN STUDIO */}
+
+        <span
           className="design-studio-btn"
 
           onClick={() => {
-            console.log("Studio clicked");
+
             setMode("studio");
+
+            setSelectedCategory(
+              null
+            );
           }}
         >
           ✨ Design Studio
@@ -34,10 +80,14 @@ export default function TopBar({ setMode, navigate }) {
 
       </div>
 
-      {/* This can still use navigate */}
+      {/* SAVED */}
+
       <button
         className="saved-btn"
-        onClick={() => navigate("/saved-designs")}
+
+        onClick={() =>
+          navigate("/saved-designs")
+        }
       >
         Saved Designs
       </button>

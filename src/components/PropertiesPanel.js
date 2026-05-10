@@ -1,9 +1,23 @@
 export default function PropertiesPanel({
+
   selectedBead,
   selectedBeadIndex,
   setBeads,
+
   selectedIds,
-  deleteSelectedShape
+  deleteSelectedShape,
+
+  /* NEW */
+
+  selectedPlaceholder,
+
+  duplicateElement,
+
+  deleteElement,
+
+  resizeElement,
+
+  rotateElement,
 }) {
 
   // 🔥 UPDATE FUNCTIONS (same as yours)
@@ -98,32 +112,128 @@ export default function PropertiesPanel({
             onChange={(e) => updateShade(e.target.value)}
           />
 
-          <h4>Size</h4>
-
-          <div style={{ display: "flex", gap: "10px" }}>
-            {["small", "medium", "large"].map((size) => (
-              <button
-                key={size}
-                onClick={() => updateSize(size)}
-                style={{
-                  padding: "8px 12px",
-                  borderRadius: "10px",
-                  border: "1px solid #ccc",
-                  background:
-                    selectedBead?.size === size ? "#8e44ad" : "white",
-                  color:
-                    selectedBead?.size === size ? "white" : "black",
-                  cursor: "pointer"
-                }}
-              >
-                {size}
-              </button>
-            ))}
-          </div>
+                
+            
         </>
       )}
 
       {/* 🔥 SHAPE ACTIONS */}
+      {/* 🔷 PLACEHOLDER CONTROLS */}
+
+{selectedPlaceholder && (
+
+  <>
+    <h3 style={{
+      marginTop: "25px"
+    }}>
+      Placeholder Controls
+    </h3>
+
+    {/* SIZE */}
+
+    <label>Size</label>
+
+    <input
+      type="range"
+
+      min="20"
+      max="120"
+
+      value={
+        selectedPlaceholder.size
+      }
+
+      onChange={(e) =>
+        resizeElement(
+          selectedPlaceholder.id,
+          Number(e.target.value)
+        )
+      }
+    />
+
+    {/* ROTATION */}
+
+    <label>Rotation</label>
+
+    <input
+      type="range"
+
+      min="0"
+      max="360"
+
+      value={
+        selectedPlaceholder.rotation || 0
+      }
+
+      onChange={(e) =>
+        rotateElement(
+          selectedPlaceholder.id,
+          Number(e.target.value)
+        )
+      }
+    />
+
+    {/* DUPLICATE */}
+
+    <button
+      onClick={() =>
+        duplicateElement(
+          selectedPlaceholder
+        )
+      }
+
+      style={{
+        marginTop: "15px",
+
+        background: "#22c55e",
+
+        color: "white",
+
+        border: "none",
+
+        padding: "10px",
+
+        borderRadius: "8px",
+
+        cursor: "pointer",
+
+        width: "100%"
+      }}
+    >
+      ➕ Duplicate
+    </button>
+
+    {/* DELETE */}
+
+    <button
+      onClick={() =>
+        deleteElement(
+          selectedPlaceholder.id
+        )
+      }
+
+      style={{
+        marginTop: "10px",
+
+        background: "#ef4444",
+
+        color: "white",
+
+        border: "none",
+
+        padding: "10px",
+
+        borderRadius: "8px",
+
+        cursor: "pointer",
+
+        width: "100%"
+      }}
+    >
+      🗑 Delete
+    </button>
+  </>
+)}
       {selectedIds && selectedIds.length > 0 && (
         <>
           <h4 style={{ marginTop: "20px" }}>Shape Actions</h4>

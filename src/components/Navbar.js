@@ -1,35 +1,46 @@
+// Navbar.jsx
+
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
+import { useNavigate } from "react-router-dom";
+
 function Navbar() {
-  const navigate = useNavigate(); // ✅ THIS WAS MISSING
+
+  const navigate = useNavigate();
 
   return (
     <nav className="navbar">
 
       <div className="logo">
-        BEADAURA <span className="circle">◯</span>
+        BeadAura <span className="circle">●</span>
       </div>
 
       <ul className="nav-links">
-        <li>About Us</li>
-        <li>Contact Us</li>
+        <li>Design Studio</li>
+        <li>Inspiration</li>
+        <li>Contact</li>
       </ul>
 
       <div className="nav-buttons">
 
         <button
+          type="button"
           className="login"
           onClick={() => navigate("/login")}
         >
           Login
         </button>
 
-        
+        <button
+          type="button"
+          className="signup"
+          onClick={() => navigate("/login")}
+        >
+          Sign Up
+        </button>
 
       </div>
-
     </nav>
   );
 }

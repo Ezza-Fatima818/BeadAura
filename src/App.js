@@ -8,7 +8,11 @@ import DesignerPage from "./pages/DesignerPage";
 import View3D from "./pages/View3D";
 import SavedDesigns from "./pages/SavedDesigns";
 import AdminDashboard from "./pages/AdminDashboard"; 
-import DesignStudio from "./pages/DesignStudio";
+
+import BackgroundRemover from "./pages/BackgroundRemover";
+
+import ModelViewerPage from "./pages/ModelViewerPage";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -27,8 +31,23 @@ function App() {
          <Route path="/admin" element={<AdminDashboard />} /> 
         <Route path="/view3d" element={<View3D />} />
         <Route path="/saved-designs" element={<SavedDesigns />} />
-            <Route path="/design-studio" element={<DesignStudio />} />
+           
+
+            <Route path="/bg-remover" element={<BackgroundRemover />} />
+       
+  
+  <Route
+  path="/3d-view"
+  element={<ModelViewerPage />}
+/>
+
+<Route
+  path="/dashboard"
+  element={<Dashboard />}
+/>
+
       </Routes>
+
     </Router>
   );
 }

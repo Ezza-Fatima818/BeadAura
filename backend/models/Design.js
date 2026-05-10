@@ -5,32 +5,43 @@ const designSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  material: {
+
+  material: String,
+  ageGroup: String,
+  color: String,
+  occasion: String,
+  description: String,
+
+  imageUrl: String,
+
+  // NEW
+  publicId: String,
+
+  // NEW
+  designType: {
     type: String,
+    default: "custom",
   },
-  ageGroup: {
-    type: String,
+
+  // NEW
+  designData: {
+    type: Object,
+    default: {},
   },
-  color: {
-    type: String,
-  },
-  occasion: {
-    type: String,
-  },
-  description: {
-    type: String,
-  },
+
   status: {
     type: String,
     default: "Pending",
   },
-  imageUrl: {
-    type: String,
-  },
+
   createdAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-module.exports = mongoose.model("Design", designSchema, "mydesigns"); // 👈 keep same collection
+module.exports = mongoose.model(
+  "Design",
+  designSchema,
+  "mydesigns"
+);
