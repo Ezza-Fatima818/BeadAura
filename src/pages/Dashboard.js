@@ -2,6 +2,8 @@
 
 import React from "react";
 import "./Dashboard.css";
+import { useNavigate } from "react-router-dom";
+
 
 import {
   Gem,
@@ -14,6 +16,9 @@ import {
 import bracelet from "../assets/bracelet.png";
 
 function Dashboard() {
+
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
   return (
 
     <div className="dashboard">
@@ -28,27 +33,47 @@ function Dashboard() {
 
         <div className="sidebar-menu">
 
-          <div className="menu-item active">
-            <Gem size={20} />
-            <span>Dashboard</span>
-          </div>
+  {/* DASHBOARD */}
 
-          <div className="menu-item">
-            <Palette size={20} />
-            <span>Design Studio</span>
-          </div>
+  <button
+    className="menu-item active"
+    onClick={() => navigate("/dashboard")}
+  >
+    <Gem size={20} />
+    <span>Dashboard</span>
+  </button>
 
-          <div className="menu-item">
-            <Heart size={20} />
-            <span>Saved Designs</span>
-          </div>
+  {/* DESIGN STUDIO */}
 
-          <div className="menu-item">
-            <User size={20} />
-            <span>Profile</span>
-          </div>
+  <button
+    className="menu-item"
+    onClick={() => navigate("/designer")}
+  >
+    <Palette size={20} />
+    <span>Design Studio</span>
+  </button>
 
-        </div>
+  {/* SAVED DESIGNS */}
+
+  <button
+    className="menu-item"
+    onClick={() => navigate("/saved-designs")}
+  >
+    <Heart size={20} />
+    <span>Saved Designs</span>
+  </button>
+
+  {/* PROFILE */}
+
+  <button
+    className="menu-item"
+    onClick={() => navigate("/profile")}
+  >
+    <User size={20} />
+    <span>Profile</span>
+  </button>
+
+</div>
 
         <div className="logout">
           <LogOut size={20} />
@@ -67,7 +92,7 @@ function Dashboard() {
 
           <div>
             <h1>
-              Welcome back, Ezza 👋
+              Welcome back, {user?.name} 
             </h1>
 
             <p>
@@ -106,9 +131,11 @@ function Dashboard() {
                   bracelet with elegance.
                 </p>
 
-                <button>
-                  Start Designing
-                </button>
+                <button
+  onClick={() => navigate("/designer")}
+>
+  Start Designing
+</button>
 
               </div>
 
@@ -181,7 +208,7 @@ function Dashboard() {
 
           <div className="section-header">
 
-            <h2>Recent Designs</h2>
+            <h2>Inspirations</h2>
 
             <span>View all</span>
 

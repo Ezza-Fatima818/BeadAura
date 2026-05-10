@@ -29,13 +29,14 @@ router.post(
       }
 
       const {
-        userId,
-        material = "Custom",
-        ageGroup = "18",
-        color = "Custom",
-        occasion = "None",
-        description = "Canvas Design",
-      } = req.body;
+  userId,
+  material = "Custom",
+  ageGroup = "18",
+  color = "Custom",
+  occasion = "None",
+  description = "Canvas Design",
+  designData,
+} = req.body;
 
       // ✅ user required
       if (!userId) {
@@ -57,9 +58,16 @@ router.post(
         imageUrl: req.file.path,
         publicId: req.file.filename,
 
+          designData:
+        designData
+    ? JSON.parse(designData)
+    : {},
+      
+
         // auto pending
-        status: "Pending",
-      });
+        status: "Draft",
+
+    });
 
       await newDesign.save();
 

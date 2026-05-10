@@ -15,3 +15,10 @@
 .canvas-area {
   flex: 1;
 }
+.menu-item.active {
+  background: rgba(236, 94, 149, 0.1);
+  color: #EC5E95;
+}
+.menu-item{
+  border: none;
+}

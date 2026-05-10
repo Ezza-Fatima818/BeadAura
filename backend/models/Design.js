@@ -14,16 +14,16 @@ const designSchema = new mongoose.Schema({
 
   imageUrl: String,
 
-  // NEW
+  // cloudinary
   publicId: String,
 
-  // NEW
+  // type of design
   designType: {
     type: String,
     default: "custom",
   },
 
-  // NEW
+  // editable design data
   designData: {
     type: Object,
     default: {},
