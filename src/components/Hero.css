@@ -34,12 +34,13 @@
 }
 
 .hero-left img {
-  width: 620px;              /* BIGGER IMAGE */
+  width: 760px;              /* BIGGER IMAGE */
   height: 520px;
 
   object-fit: cover;
 
-  border-radius: 40px;       /* ROUNDED CORNERS */
+  border-radius: 40px;  
+   margin-left: -120px;     /* ROUNDED CORNERS */
 
   filter: drop-shadow(
     0 25px 40px rgba(236, 94, 149, 0.12)
@@ -158,7 +159,8 @@
   background: #fad1e0;
 
   top: 120px;
-  left: 120px;
+
+  left: 40px;
 }
 
 .bead2 {

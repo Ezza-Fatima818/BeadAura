@@ -9,6 +9,10 @@ import {
 } from "react-dnd";
 
 import "./DesignStudioCanvas.css";
+import JumpRing
+from "./JewelryComponents/JumpRing";
+import LetterBead
+from "./JewelryComponents/LetterBead";
 
 
 
@@ -23,6 +27,8 @@ export default function DesignStudioCanvas({
   setSelectedIds,
   placedImages,
 setPlacedImages,
+updateShapes,
+canvasUndoRef
 }) {
 
   const canvasRef = useRef(null);
@@ -37,6 +43,11 @@ setPlacedImages,
 
   const [resizingId, setResizingId] =
     useState(null);
+  const [canvasHistory,
+  setCanvasHistory] =
+  useState([]);
+
+
 
   /* =================================
      DROPPED BEADS
@@ -81,6 +92,12 @@ const [rotatingChainId, setRotatingChainId] =
   useState(null);
 const [draggingPoint, setDraggingPoint] =
   useState(null);
+
+  
+
+const [redoHistory,
+  setRedoHistory] =
+  useState([]);
 
 
   /* =================================
@@ -156,18 +173,26 @@ const [draggingPoint, setDraggingPoint] =
       setPlacedBeads((prev) => [
         ...prev,
 
-        {
-          id: Date.now(),
+       {
+  id: Date.now(),
 
-          x,
-          y,
+  x,
+  y,
 
-          src: item.src,
+  src: item.src,
 
-          width: 80,
+  type: item.type,
 
-          height: 80,
-        },
+  letter: item.letter,
+
+  beadColor: item.beadColor,
+
+  textColor: item.textColor,
+
+  width: 80,
+
+  height: 80,
+},
       ]);
     },
 
@@ -195,17 +220,73 @@ const [draggingPoint, setDraggingPoint] =
      DRAWING
   ================================= */
 
-  const startDrawing = (e) => {
-    if (
-      tool !== "pen" &&
-      tool !== "eraser"
-    )
-      return;
+ const startDrawing = (e) => {
 
-    setDrawing(true);
+  if (
+    tool !== "pen" &&
+    tool !== "eraser"
+  ) return;
 
-    draw(e);
+  const canvas =
+    canvasRef.current;
+
+  setCanvasHistory(prev => [
+
+    ...prev,
+
+    canvas.toDataURL()
+
+  ]);
+
+  setRedoHistory([]);
+
+  setDrawing(true);
+
+  draw(e);
+};
+
+
+const undoCanvas = () => {
+
+  if (
+    canvasHistory.length === 0
+  ) return;
+
+  const canvas =
+    canvasRef.current;
+
+  const ctx =
+    canvas.getContext("2d");
+
+  const previous =
+    canvasHistory[
+      canvasHistory.length - 1
+    ];
+
+  const img = new Image();
+
+  img.src = previous;
+
+  img.onload = () => {
+
+    ctx.clearRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    ctx.drawImage(
+      img,
+      0,
+      0
+    );
   };
+
+  setCanvasHistory(prev =>
+    prev.slice(0, -1)
+  );
+};
 
   const endDrawing = () => {
     setDrawing(false);
@@ -1016,12 +1097,37 @@ return (
         "translate(-50%, -50%)",
     }}
   >
-    <img
-      src={bead.src}
-      alt="Dropped Bead"
-      draggable={false}
-      className="design-bead"
-    />
+    {bead.type === "letterBead" ? (
+
+  <LetterBead
+
+    letter={bead.letter}
+
+    beadColor={bead.beadColor}
+
+    textColor={bead.textColor}
+
+    size={bead.width || 40}
+
+  />
+
+) : bead.type === "jumpRing" ? (
+
+  <JumpRing
+    size={bead.width || 40}
+    color={bead.color}
+  />
+
+) : (
+
+  <img
+    src={bead.src}
+    alt="Dropped Bead"
+    draggable={false}
+    className="design-bead"
+  />
+
+)}
 
     {/* RESIZE */}
 

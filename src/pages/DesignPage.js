@@ -50,6 +50,16 @@ from "../hooks/useRotateElement";
 import html2canvas from "html2canvas";
 import axios from "axios";
 
+import Sidebar from "../components/Sidebar";
+import { useLocation } from "react-router-dom";
+
+import BraceletBuilder
+from "../components/BraceletBuilder";
+import EarringBuilder
+from "../components/EarringBuilder";
+
+
+
 /* =================================
    MAIN COMPONENT
 ================================= */
@@ -62,9 +72,11 @@ export default function DesignPage({
 }) {
 
   const ref = useRef(null);
+  const canvasUndoRef =
+  useRef(null);
 
-  const navigate =
-    useNavigate();
+  const navigate =useNavigate();
+  const location = useLocation();
 
   /* =================================
      STATES
@@ -74,17 +86,24 @@ export default function DesignPage({
     setPositions] =
     useState([]);
 
-  const [selectedCategory,
-    setSelectedCategory] =
-    useState(null);
+  const [
+  selectedCategory,
+  setSelectedCategory
+] = useState(
+  location.state?.category ||
+  null
+);
 
   const [selectedString,
     setSelectedString] =
     useState(null);
+  
+  const [mode, setMode] =useState(
+    location.state?.mode ||
+    "template"
+  );
 
-  const [mode,
-    setMode] =
-    useState("bracelet");
+  
 
   const [tool,
     setTool] =
@@ -158,6 +177,140 @@ export default function DesignPage({
       setPlaceholders
     );
 
+    const [selectedBuilderBead,
+  setSelectedBuilderBead] =
+  useState(null);
+
+    const [
+
+  braceletSlots,
+
+  setBraceletSlots
+
+] = useState(
+  Array(25).fill(null)
+);
+
+const [
+
+  selectedBraceletIndex,
+
+  setSelectedBraceletIndex
+
+] = useState(null);
+
+//earring states
+const [
+
+  earringSlots,
+
+  setEarringSlots
+
+] = useState(
+  Array(5).fill(null)
+);
+
+const [
+
+  selectedEarringIndex,
+
+  setSelectedEarringIndex
+
+] = useState(null);
+
+const selectedEarringBead =
+
+  selectedEarringIndex !==
+  null
+
+    ? earringSlots[
+        selectedEarringIndex
+      ]
+
+    : null;
+
+
+  
+
+
+
+//selectedbracelet bead
+const selectedBraceletBead =
+
+  selectedBraceletIndex !==
+  null
+
+    ? braceletSlots[
+        selectedBraceletIndex
+      ]
+
+    : null;
+
+    const resizeBraceletBead =
+(size) => {
+
+  if (
+    selectedBraceletIndex ===
+    null
+  ) return;
+
+  const updated =
+    [...braceletSlots];
+
+  updated[
+    selectedBraceletIndex
+  ] = {
+
+    ...updated[
+      selectedBraceletIndex
+    ],
+
+    size:
+      Number(size)
+  };
+
+  setBraceletSlots(updated);
+};
+
+//delete bracelet
+const deleteBraceletBead =
+() => {
+
+  if (
+    selectedBraceletIndex ===
+    null
+  ) return;
+
+  const updated =
+    [...braceletSlots];
+
+  updated[
+    selectedBraceletIndex
+  ] = null;
+
+  setBraceletSlots(updated);
+};
+
+const fillBracelet = () => {
+
+  if (
+    !selectedBuilderBead
+  ) return;
+
+  const updated =
+
+    braceletSlots.map(
+      () => ({
+
+        ...selectedBuilderBead,
+
+        size: 36
+      })
+    );
+
+  setBraceletSlots(updated);
+};
+    
   /* =================================
      IMAGE TRANSPARENCY
   ================================= */
@@ -597,6 +750,11 @@ const saveDesign = async () => {
         "Jewelry Design"
       );
 
+      JSON.stringify({
+    beads,
+  })
+
+
       // optional future support
       formData.append(
         "designType",
@@ -626,34 +784,68 @@ const saveDesign = async () => {
     );
   }
 };
-  return (
 
+const clearCanvas = () => {
+
+  
+
+  setShapes([]);
+
+  setPlacedImages([]);
+
+  setBeads({});
+
+  setPositions([]);
+
+  setPlaceholders([]);
+
+  setSelectedIds([]);
+
+  setSelectedPlaceholder(null);
+
+  setSelectedBeadIndex(null);
+
+  setSelectedString(null);
+
+  // FORCE REMOUNT
+  setCanvasKey(
+    prev => prev + 1
+  );
+
+
+
+};
+const [canvasKey,
+  setCanvasKey] =
+  useState(0);
+ return (
+
+  <div className="studio-page">
+
+    {/* SIDEBAR */}
+
+    <Sidebar 
+    active="designer" 
     
+    setMode={setMode}
+    setSelectedCategory={setSelectedCategory}/>
+
+    {/* RIGHT SIDE */}
+
     <div className="canvas-area">
 
-      {/* TOPBAR */}
+      
 
-      <TopBar
-        setMode={setMode}
-
-        setSelectedCategory={
-          setSelectedCategory
-        }
-
-        navigate={
-          navigate
-        }
-      />
+      
 
       {/* MAIN */}
 
       <div className="main-layout">
 
-        {/* LEFT */}
+        {/* LEFT PANEL */}
 
         {(selectedCategory ||
-          mode ===
-            "studio") && (
+          mode === "studio") && (
 
           <Palette
             mode={mode}
@@ -669,6 +861,7 @@ const saveDesign = async () => {
             selectedString={
               selectedString
             }
+            tool={tool}
 
             setTool={
               setTool
@@ -687,18 +880,27 @@ const saveDesign = async () => {
             }
 
             handleDirectImageUpload={
-              handleDirectImageUpload
-            }
+              handleDirectImageUpload}
+            undo={undo}
+            redo={redo}
+            clearCanvas={clearCanvas}
+
+            undoCanvas={() =>
+  canvasUndoRef.current?.()
+}
+
+   setSelectedBuilderBead={
+  setSelectedBuilderBead
+}
           />
         )}
 
-        {/* CENTER */}
+        {/* CENTER CANVAS */}
 
         <div
           ref={(node) => {
 
-            ref.current =
-              node;
+            ref.current = node;
 
             drop(node);
           }}
@@ -707,14 +909,16 @@ const saveDesign = async () => {
         >
 
           {!selectedString &&
-            mode !==
-              "studio" && (
+  mode !== "studio" &&
+  selectedCategory !== "bracelets" && (
 
             <>
               <div className="canvas-text">
+
                 <h1>
                   Design your own jewelry
                 </h1>
+
               </div>
 
               <img
@@ -729,184 +933,197 @@ const saveDesign = async () => {
 
           <div className="canvas-content">
 
-            {mode ===
-            "studio" ? (
+  {selectedCategory ===
+"bracelets" ? (
 
-              <DesignStudioCanvas
-                tool={tool}
+  <BraceletBuilder
 
-                color={color}
+    slots={braceletSlots}
 
-                size={size}
+    setSlots={
+      setBraceletSlots
+    }
 
-                shapes={shapes}
+    selectedIndex={
+      selectedBraceletIndex
+    }
 
-                setShapes={
-                  setShapes
-                }
+    setSelectedIndex={
+      setSelectedBraceletIndex
+    }
 
-                deleteSelectedShape={
-                  deleteSelectedShape
-                }
+    selectedBuilderBead={
+      selectedBuilderBead
+    }
 
-                selectedIds={
-                  selectedIds
-                }
+  />
 
-                setSelectedIds={
-                  setSelectedIds
-                }
+) : selectedCategory ===
+"earrings" ? (
 
-                placedImages={
-                  placedImages
-                }
+  <EarringBuilder
 
-                setPlacedImages={
-                  setPlacedImages
-                }
-              />
+    slots={earringSlots}
 
-            ) : (
+    setSlots={
+      setEarringSlots
+    }
 
-              <>
-                {selectedString?.name ===
-                  "Flower Bracelet" && (
+    selectedIndex={
+      selectedEarringIndex
+    }
 
-                  <FlowerBracelet
-                    beads={beads}
+    setSelectedIndex={
+      setSelectedEarringIndex
+    }
 
-                    setBeads={
-                      setBeads
-                    }
+    selectedBuilderBead={
+      selectedBuilderBead
+    }
 
-                    selectedBeadIndex={
-                      selectedBeadIndex
-                    }
+  />
 
-                    setSelectedBeadIndex={
-                      setSelectedBeadIndex
-                    }
+) : mode === "studio" ? (
 
-                    selectedPlaceholder={
-                      selectedPlaceholder
-                    }
+  <DesignStudioCanvas
 
-                    setSelectedPlaceholder={
-                      setSelectedPlaceholder
-                    }
+    tool={tool}
 
-                    placeholders={
-                      placeholders
-                    }
+    color={color}
 
-                    setPlaceholders={
-                      setPlaceholders
-                    }
-                  />
-                )}
+    size={size}
 
-                {selectedString?.name ===
-                  "Custom Design" && (
+    shapes={shapes}
 
-                  <CustomBracelet
-                    beads={beads}
+    setShapes={setShapes}
 
-                    setBeads={
-                      setBeads
-                    }
+    deleteSelectedShape={
+      deleteSelectedShape
+    }
 
-                    positions={
-                      positions
-                    }
+    selectedIds={selectedIds}
 
-                    setPositions={
-                      setPositions
-                    }
+    setSelectedIds={
+      setSelectedIds
+    }
 
-                    selectedBeadIndex={
-                      selectedBeadIndex
-                    }
+    placedImages={placedImages}
 
-                    setSelectedBeadIndex={
-                      setSelectedBeadIndex
-                    }
-                  />
-                )}
-              </>
-            )}
-          </div>
+    setPlacedImages={
+      setPlacedImages
+    }
+
+    key={canvasKey}
+
+    updateShapes={updateShapes}
+
+    canvasUndoRef={
+      canvasUndoRef
+    }
+
+  />
+
+) : null}
+</div>
+
+          
+
         </div>
 
-        {/* RIGHT */}
+        {/* RIGHT PANEL */}
 
         <PropertiesPanel
 
-          selectedBeadIndex={
-            selectedBeadIndex
-          }
+  selectedBeadIndex={
+    selectedBeadIndex
+  }
 
-          selectedBead={
-            selectedBead
-          }
+  selectedBead={
+    selectedBead
+  }
 
-          setBeads={
-            setBeads
-          }
+  setBeads={
+    setBeads
+  }
 
-          beads={beads}
+  beads={beads}
 
-          selectedIds={
-            selectedIds
-          }
+  selectedIds={
+    selectedIds
+  }
 
-          deleteSelectedShape={
-            deleteSelectedShape
-          }
+  deleteSelectedShape={
+    deleteSelectedShape
+  }
 
-          selectedPlaceholder={
-            selectedPlaceholder
-          }
+  selectedPlaceholder={
+    selectedPlaceholder
+  }
 
-          duplicateElement={
-            duplicateElement
-          }
+  duplicateElement={
+    duplicateElement
+  }
 
-          deleteElement={
-            deleteElement
-          }
+  deleteElement={
+    deleteElement
+  }
 
-          resizeElement={
-            resizeElement
-          }
+  resizeElement={
+    resizeElement
+  }
 
-          rotateElement={
-            rotateElement
-          }
-        />
+  rotateElement={
+    rotateElement
+  }
+
+  selectedBraceletBead={
+    selectedBraceletBead
+  }
+
+  resizeBraceletBead={
+    resizeBraceletBead
+  }
+
+  deleteBraceletBead={
+    deleteBraceletBead
+  }
+
+  fillBracelet={
+    fillBracelet
+  }
+
+/>
 
       </div>
 
-      {/* SAVE */}
+      {/* SAVE BUTTON */}
 
-     {(
-  mode === "studio" ||
+      {(
 
-  Object.keys(beads).length > 0 ||
+        mode === "studio" ||
 
-  shapes.length > 0 ||
+        Object.keys(beads).length > 0 ||
 
-  placedImages.length > 0
-) && (
+        shapes.length > 0 ||
+
+        placedImages.length > 0
+
+      ) && (
 
         <div className="button-group">
+
           <button
             onClick={saveDesign}
           >
             Save Design
           </button>
+
         </div>
       )}
 
     </div>
-  );
+
+  </div>
+);
+
 }

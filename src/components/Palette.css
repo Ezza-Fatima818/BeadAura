@@ -1,207 +1,332 @@
-/* ===== PALETTE ===== */
+/* =================================
+   PALETTE
+================================= */
+
 .palette {
-  width: 250px;
-  min-width: 250px;
+  width: 280px;
+
+  min-width: 280px;
 
   background: white;
 
-  padding: 20px;
+  padding: 24px;
 
   box-sizing: border-box;
 
-  border-right: 1px solid #eee;
+  border-radius: 28px;
 
-  align-self: stretch;
-
-  min-height: 100vh;
+  box-shadow:
+    0 8px 25px rgba(0,0,0,0.04);
 
   overflow-y: auto;
+
+  height: 100%;
+
+  font-family: "Poppins", sans-serif;
 }
 
-/* ===== TITLE ===== */
+/* =================================
+   TITLE
+================================= */
+
 .palette-title {
-  text-align: center;
-  margin-bottom: 25px;
-  color: #8e44ad;
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 26px;
+
+  font-weight: 700;
+
+  color: #EC5E95;
+
+  margin-bottom: 28px;
 }
 
-/* ===== SECTION ===== */
+/* =================================
+   SECTION
+================================= */
+
 .section {
-  margin-bottom: 25px;
+  margin-bottom: 32px;
 }
 
-/* ===== BUTTON GROUP ===== */
+.section h4 {
+  font-size: 15px;
+
+  font-weight: 600;
+
+  margin-bottom: 16px;
+
+  color: rgba(0,0,0,0.75);
+}
+
+/* =================================
+   BUTTON GROUP
+================================= */
+
 .category-buttons {
   display: flex;
+
   flex-wrap: wrap;
+
   gap: 10px;
 }
 
-/* ===== BUTTON STYLE ===== */
+/* =================================
+   BUTTON STYLE
+================================= */
+
 .category-btn {
-  background: #faf7ff;
-  border: 1px solid #e5d8ff;
-  color: #6a1b9a;
-  padding: 8px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 13px;
-  transition: all 0.25s ease;
-}
-
-/* Hover */
-.category-btn:hover {
-  background: linear-gradient(135deg, #b388ff, #8e44ad);
-  color: white;
-  transform: translateY(-1px);
-}
-
-/* Active */
-.category-btn.active {
-  background: linear-gradient(135deg, #8e44ad, #6a1b9a);
-  color: white;
-  box-shadow: 0px 3px 10px rgba(140, 80, 200, 0.3);
-}
-
-/* ===== BEADS GRID ===== */
-
-
-/* ===== VIEW MORE ===== */
-.view-more-btn {
-  margin-top: 12px;
-  width: 100%;
-  padding: 10px;
   border: none;
-  background: #b388ff;
-  color: white;
-  border-radius: 10px;
+
+  background: #FAF4F6;
+
+  color: #EC5E95;
+
+  padding: 10px 16px;
+
+  border-radius: 14px;
+
   cursor: pointer;
+
+  font-size: 13px;
+
   font-weight: 500;
-  transition: 0.3s;
+
+  transition: 0.3s ease;
+}
+
+/* HOVER */
+
+.category-btn:hover {
+  background: linear-gradient(
+    135deg,
+    #EC5E95,
+    #F28AB0
+  );
+
+  color: white;
+
+  transform: translateY(-2px);
+}
+
+/* ACTIVE */
+
+.category-btn.active {
+  background: linear-gradient(
+    135deg,
+    #EC5E95,
+    #F28AB0
+  );
+
+  color: white;
+
+  box-shadow:
+    0 10px 20px rgba(236,94,149,0.18);
+}
+
+/* =================================
+   VIEW MORE
+================================= */
+
+.view-more-btn {
+  margin-top: 16px;
+
+  width: 100%;
+
+  padding: 12px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  background: linear-gradient(
+    135deg,
+    #EC5E95,
+    #F28AB0
+  );
+
+  color: white;
+
+  cursor: pointer;
+
+  font-weight: 600;
+
+  transition: 0.3s ease;
+
+  box-shadow:
+    0 10px 20px rgba(236,94,149,0.15);
 }
 
 .view-more-btn:hover {
-  background: #9c6bff;
+  transform: translateY(-2px);
 }
-/* Grid Layout */
+
+/* =================================
+   BEAD GRID
+================================= */
+
 .beadGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 20px;
+
   justify-items: center;
-  padding: 10px;
 }
 
-/* Bead container */
+/* =================================
+   BEAD ITEM
+================================= */
+
 .beadItem {
   position: relative;
-  width: 50px;
-  height: 50px;
+
+  width: 58px;
+  height: 58px;
+
   cursor: pointer;
-  transition: transform 0.3s ease;
+
+  transition: 0.3s ease;
 }
 
-/* Image */
+/* IMAGE */
+
 .beadItem img {
   width: 100%;
   height: 100%;
+
   border-radius: 50%;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
-/* Hover zoom */
+/* HOVER */
+
 .beadItem:hover img {
-  transform: scale(1.6);
+  transform: scale(1.45);
+
   z-index: 10;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+
+  box-shadow:
+    0 12px 24px rgba(236,94,149,0.2);
 }
 
-/* Name tooltip */
+/* =================================
+   NAME TOOLTIP
+================================= */
+
 .beadName {
   position: absolute;
-  bottom: -22px;
+
+  bottom: -26px;
+
   left: 50%;
+
   transform: translateX(-50%);
+
   font-size: 11px;
-  background: black;
+
+  background: #EC5E95;
+
   color: white;
-  padding: 3px 8px;
-  border-radius: 6px;
+
+  padding: 5px 9px;
+
+  border-radius: 8px;
+
   opacity: 0;
-  transition: 0.3s;
+
+  transition: 0.3s ease;
+
   white-space: nowrap;
+
+  pointer-events: none;
 }
 
-/* Show name */
+/* SHOW */
+
 .beadItem:hover .beadName {
   opacity: 1;
 }
-/* ===== SHAPE GRID ===== */
+
+/* =================================
+   SHAPE GRID
+================================= */
 
 .shape-grid {
   display: grid;
 
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns:
+    repeat(3, 1fr);
 
   gap: 16px;
 
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
-/* ===== SHAPE CARD ===== */
+/* =================================
+   SHAPE CARD
+================================= */
 
 .shape-icon-card {
   position: relative;
 
-  width: 60px;
-  height: 60px;
+  width: 68px;
+  height: 68px;
 
-  background: #faf7ff;
+  background: #FAF4F6;
 
-  border: 1px solid #e5d8ff;
-
-  border-radius: 14px;
+  border-radius: 18px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
   cursor: pointer;
 
-  transition: 0.25s;
+  transition: 0.3s ease;
 }
 
 .shape-icon-card:hover {
-  transform: scale(1.08);
+  transform: translateY(-4px);
 
-  background: linear-gradient(135deg, #b388ff, #8e44ad);
+  background: linear-gradient(
+    135deg,
+    #EC5E95,
+    #F28AB0
+  );
 }
 
-/* ===== TOOLTIP ===== */
+/* =================================
+   TOOLTIP
+================================= */
 
 .shape-tooltip {
   position: absolute;
 
-  bottom: -28px;
+  bottom: -30px;
+
   left: 50%;
 
   transform: translateX(-50%);
 
-  background: black;
+  background: #EC5E95;
 
   color: white;
 
-  padding: 4px 8px;
+  padding: 5px 9px;
 
-  border-radius: 6px;
+  border-radius: 8px;
 
   font-size: 11px;
 
   opacity: 0;
 
-  transition: 0.25s;
+  transition: 0.3s ease;
 
   white-space: nowrap;
 
@@ -212,60 +337,76 @@
   opacity: 1;
 }
 
-/* ===== SHAPE ICON BASE ===== */
+/* =================================
+   SHAPE ICON BASE
+================================= */
 
 .shape-icon {
   width: 26px;
   height: 26px;
 
-  background: #8e44ad;
+  background: #EC5E95;
 }
 
-/* ===== ROUND ===== */
+/* =================================
+   ROUND
+================================= */
 
 .shape-icon.circle {
   border-radius: 50%;
 }
 
-/* ===== OVAL ===== */
+/* =================================
+   OVAL
+================================= */
 
 .shape-icon.oval {
   border-radius: 50%;
+
   width: 34px;
   height: 22px;
 }
 
-/* ===== CUBE ===== */
+/* =================================
+   CUBE
+================================= */
 
 .shape-icon.cube {
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
-/* ===== TEARDROP ===== */
+/* =================================
+   TEARDROP
+================================= */
 
 .shape-icon.teardrop {
   width: 22px;
   height: 30px;
 
-  border-radius: 50% 50% 50% 0;
+  border-radius:
+    50% 50% 50% 0;
 
   transform: rotate(45deg);
 }
 
-/* ===== DONUT ===== */
+/* =================================
+   DONUT
+================================= */
 
 .shape-icon.donut {
   width: 30px;
   height: 30px;
 
-  border: 7px solid #8e44ad;
+  border: 7px solid #EC5E95;
 
   background: transparent;
 
   border-radius: 50%;
 }
 
-/* ===== COIN ===== */
+/* =================================
+   COIN
+================================= */
 
 .shape-icon.coin {
   width: 32px;
@@ -274,7 +415,9 @@
   border-radius: 50%;
 }
 
-/* ===== CYLINDER ===== */
+/* =================================
+   CYLINDER
+================================= */
 
 .shape-icon.cylinder {
   width: 18px;
@@ -283,7 +426,9 @@
   border-radius: 10px;
 }
 
-/* ===== OCTAGON ===== */
+/* =================================
+   OCTAGON
+================================= */
 
 .shape-icon.octagon {
   clip-path: polygon(
@@ -298,7 +443,9 @@
   );
 }
 
-/* ===== BICONE ===== */
+/* =================================
+   BICONE
+================================= */
 
 .shape-icon.bicone {
   clip-path: polygon(
@@ -307,4 +454,38 @@
     50% 100%,
     0% 50%
   );
+}
+
+/* =================================
+   SEARCH
+================================= */
+
+.palette-search {
+  margin-bottom: 24px;
+}
+
+.palette-search input {
+  width: 100%;
+  height: 5px;
+
+  padding: 14px 18px;
+
+  border: none;
+
+  border-radius: 16px;
+
+  background: #FAF4F6;
+
+  outline: none;
+
+  font-size: 12px;
+
+  font-family: "Poppins", sans-serif;
+
+  transition: 0.3s ease;
+}
+
+.palette-search input:focus {
+  box-shadow:
+    0 0 0 3px rgba(236,94,149,0.12);
 }

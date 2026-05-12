@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import "./AdminProfile.css";
 
 export default function AdminProfile() {
+
   const [profile, setProfile] = useState({
     name: "",
     email: "",
@@ -9,14 +11,18 @@ export default function AdminProfile() {
     image: "",
   });
 
-  // 🔥 LOAD SAVED PROFILE
+  // LOAD PROFILE
   useEffect(() => {
-    const savedProfile = localStorage.getItem("adminProfile");
+
+    const savedProfile =
+      localStorage.getItem("adminProfile");
 
     if (savedProfile) {
+
       setProfile(JSON.parse(savedProfile));
+
     } else {
-      // DEFAULT PROFILE
+
       setProfile({
         name: "Admin",
         email: "admin@gmail.com",
@@ -25,38 +31,47 @@ export default function AdminProfile() {
         image:
           "https://cdn-icons-png.flaticon.com/512/149/149071.png",
       });
+
     }
+
   }, []);
 
-  // 🔥 HANDLE INPUT CHANGES
+  // INPUT CHANGE
   const handleChange = (e) => {
+
     setProfile({
       ...profile,
       [e.target.name]: e.target.value,
     });
+
   };
 
-  // 🔥 HANDLE IMAGE UPLOAD
+  // IMAGE CHANGE
   const handleImageChange = (e) => {
+
     const file = e.target.files[0];
 
     if (file) {
+
       const reader = new FileReader();
 
       reader.onloadend = () => {
+
         setProfile({
           ...profile,
           image: reader.result,
         });
+
       };
 
       reader.readAsDataURL(file);
+
     }
   };
 
-  // 🔥 SAVE PROFILE
+  // SAVE
   const saveProfile = () => {
-    // VALIDATION
+
     if (!profile.name.trim()) {
       alert("Name is required");
       return;
@@ -74,86 +89,65 @@ export default function AdminProfile() {
 
     alert("Profile updated successfully!");
 
-    // 🔥 REFRESH PAGE
     window.location.reload();
   };
 
   return (
-    <div
-      style={{
-        background: "#fff",
-        padding: "35px",
-        borderRadius: "16px",
-        maxWidth: "750px",
-        margin: "20px auto",
-        boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
-      }}
-    >
-      {/* 🔥 TITLE */}
-      <h2
-        style={{
-          marginBottom: "30px",
-          color: "#111827",
-          fontSize: "28px",
-        }}
-      >
-        Admin Profile
-      </h2>
 
-      {/* 🔥 PROFILE SECTION */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "25px",
-          marginBottom: "35px",
-        }}
-      >
-        {/* PROFILE IMAGE */}
-        <img
-          src={
-            profile.image ||
-            "https://cdn-icons-png.flaticon.com/512/149/149071.png"
-          }
-          alt="Profile"
-          style={{
-            width: "130px",
-            height: "130px",
-            borderRadius: "50%",
-            objectFit: "cover",
-            border: "4px solid #111827",
-          }}
-        />
+    <div className="profile-container">
 
-        {/* IMAGE INPUT */}
-        <div>
-          <p
-            style={{
-              marginBottom: "10px",
-              fontWeight: "600",
-            }}
-          >
-            Upload Profile Picture
-          </p>
+      {/* TITLE */}
+      <div className="profile-header">
 
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-        </div>
+        <h2>
+          Admin Profile
+        </h2>
+
+        <p>
+          Manage your BeadAura admin account
+        </p>
+
       </div>
 
-      {/* 🔥 FORM */}
-      <div
-        style={{
-          display: "grid",
-          gap: "22px",
-        }}
-      >
+      {/* PROFILE TOP */}
+      <div className="profile-top">
+
+        {/* IMAGE */}
+        <div className="profile-image-section">
+
+          <img
+            src={
+              profile.image ||
+              "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+            }
+            alt="Profile"
+            className="profile-image"
+          />
+
+          <label className="upload-btn">
+
+            Upload Photo
+
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              hidden
+            />
+
+          </label>
+
+        </div>
+
+      </div>
+
+      {/* FORM */}
+      <div className="profile-form">
+
         {/* NAME */}
-        <div>
-          <label style={labelStyle}>
+        <div className="profile-group">
+
+          <label>
             Full Name
           </label>
 
@@ -163,13 +157,14 @@ export default function AdminProfile() {
             value={profile.name}
             onChange={handleChange}
             placeholder="Enter your name"
-            style={inputStyle}
           />
+
         </div>
 
         {/* EMAIL */}
-        <div>
-          <label style={labelStyle}>
+        <div className="profile-group">
+
+          <label>
             Email Address
           </label>
 
@@ -179,13 +174,14 @@ export default function AdminProfile() {
             value={profile.email}
             onChange={handleChange}
             placeholder="Enter email"
-            style={inputStyle}
           />
+
         </div>
 
         {/* ROLE */}
-        <div>
-          <label style={labelStyle}>
+        <div className="profile-group">
+
+          <label>
             Role
           </label>
 
@@ -193,17 +189,15 @@ export default function AdminProfile() {
             type="text"
             value={profile.role}
             disabled
-            style={{
-              ...inputStyle,
-              background: "#f3f4f6",
-              cursor: "not-allowed",
-            }}
+            className="disabled-input"
           />
+
         </div>
 
         {/* PHONE */}
-        <div>
-          <label style={labelStyle}>
+        <div className="profile-group">
+
+          <label>
             Phone Number
           </label>
 
@@ -213,71 +207,48 @@ export default function AdminProfile() {
             value={profile.phone}
             onChange={handleChange}
             placeholder="Enter phone number"
-            style={inputStyle}
           />
+
         </div>
 
-        {/* SAVE BUTTON */}
-        {/* SAVE BUTTON */}
-<button
-  onClick={saveProfile}
-  style={{
-    background: "#111827",
-    color: "#fff",
-    border: "none",
-    padding: "15px",
-    borderRadius: "10px",
-    cursor: "pointer",
-    fontSize: "16px",
-    fontWeight: "600",
-    marginTop: "10px",
-  }}
->
-  Save Changes
-</button>
+        {/* BUTTONS */}
+        <div className="profile-buttons">
 
-{/* LOGOUT BUTTON */}
-<button
-  onClick={() => {
-    localStorage.removeItem("adminToken");
+          <button
+            onClick={saveProfile}
+            className="save-profile-btn"
+          >
 
-    alert("Logged out successfully!");
+            Save Changes
 
-    window.location.href = "/login";
-  }}
-  style={{
-    background: "#ef4444",
-    color: "#fff",
-    border: "none",
-    padding: "15px",
-    borderRadius: "10px",
-    cursor: "pointer",
-    fontSize: "16px",
-    fontWeight: "600",
-  }}
->
-  Logout
-</button>
+          </button>
+
+          <button
+            onClick={() => {
+
+              localStorage.removeItem(
+                "adminToken"
+              );
+
+              alert(
+                "Logged out successfully!"
+              );
+
+              window.location.href =
+                "/login";
+
+            }}
+            className="logout-btn"
+          >
+
+            Logout
+
+          </button>
+
+        </div>
+
       </div>
+
     </div>
   );
 }
-
-// 🔥 INPUT STYLE
-const inputStyle = {
-  width: "100%",
-  padding: "13px",
-  marginTop: "8px",
-  borderRadius: "10px",
-  border: "1px solid #d1d5db",
-  outline: "none",
-  fontSize: "14px",
-  boxSizing: "border-box",
-};
-
-// 🔥 LABEL STYLE
-const labelStyle = {
-  fontWeight: "600",
-  color: "#111827",
-  fontSize: "15px",
-};

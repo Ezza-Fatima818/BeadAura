@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Palette from "../components/Palette";
+
 import DesignPage from "./DesignPage";
-import PropertiesPanel from "../components/PropertiesPanel";
-import "./DesignerPage.css";
+
+
 
 function DesignerPage() {
   const [selectedString, setSelectedString] =
@@ -20,39 +20,27 @@ function DesignerPage() {
       ? beads[selectedBeadIndex]
       : null;
   return (
-    <div className="designer-page">
-      {/* Top Bar */}
-      
 
-      {/* Main Layout */}
-      <div className="designer-container">
-        
-        {/* LEFT - Palette */}
-        <div className="sidebar">
-          <Palette
-            setSelectedString={setSelectedString}
-          />
-        </div>
+  <DesignPage
+    selectedString={selectedString}
 
-        {/* CENTER - Canvas */}
-        <div className="canvas-area">
-          <DesignPage
-            selectedString={selectedString}
-            beads={beads}
-            setBeads={setBeads}
-            selectedBeadIndex={selectedBeadIndex}
-            setSelectedBeadIndex={
-              setSelectedBeadIndex
-            }
-          />
-        </div>
+    setSelectedString={
+      setSelectedString
+    }
 
-        {/* RIGHT - Properties */}
-        
+    beads={beads}
 
-      </div>
-    </div>
-  );
+    setBeads={setBeads}
+
+    selectedBeadIndex={
+      selectedBeadIndex
+    }
+
+    setSelectedBeadIndex={
+      setSelectedBeadIndex
+    }
+  />
+);
 }
 
 export default DesignerPage;

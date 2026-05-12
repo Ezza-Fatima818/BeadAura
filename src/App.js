@@ -13,6 +13,9 @@ import BackgroundRemover from "./pages/BackgroundRemover";
 
 import ModelViewerPage from "./pages/ModelViewerPage";
 import Dashboard from "./pages/Dashboard";
+import ResetPassword
+from "./pages/ResetPassword";
+import ForgotPassword from "./pages/ForgotPassword";
 
 function App() {
   return (
@@ -44,6 +47,14 @@ function App() {
 <Route
   path="/dashboard"
   element={<Dashboard />}
+/>
+<Route
+  path="/reset-password/:token"
+  element={<ResetPassword />}
+/>
+<Route
+  path="/forgot-password"
+  element={<ForgotPassword />}
 />
 
       </Routes>

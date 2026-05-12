@@ -148,9 +148,13 @@ const Login = () => {
 
                 <label>Password</label>
 
-                <span>
-                  Forgot password?
-                </span>
+                <span
+  onClick={() =>
+    navigate("/forgot-password")
+  }
+>
+  Forgot password?
+</span>
 
               </div>
 

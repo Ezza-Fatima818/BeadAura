@@ -35,7 +35,7 @@ function Navbar() {
         <button
           type="button"
           className="signup"
-          onClick={() => navigate("/login")}
+          onClick={() => navigate("/signup")}
         >
           Sign Up
         </button>

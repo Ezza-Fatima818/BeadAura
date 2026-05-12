@@ -1,0 +1,212 @@
+.sidebar {
+  width: 260px;
+
+  height: 100vh;
+
+  background: white;
+
+  padding: 30px 20px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: space-between;
+
+  border-right: 1px solid rgba(0,0,0,0.05);
+
+  font-family: "Poppins", sans-serif;
+}
+
+/* LOGO */
+
+.sidebar-logo {
+  font-size: 24px;
+
+  font-weight: 700;
+
+  color: #ec5e95;
+
+  margin-bottom: 40px;
+}
+
+.sidebar-logo span {
+  color: #ffd230;
+}
+
+/* MENU */
+
+.sidebar-menu {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+/* BUTTON */
+
+.menu-item {
+  width: 100%;
+
+  border: none;
+
+  background: transparent;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 16px 18px;
+
+  border-radius: 18px;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+
+  color: rgba(0,0,0,0.7);
+
+  font-size: 15px;
+
+  font-family: "Poppins", sans-serif;
+
+  text-align: left;
+}
+
+/* HOVER */
+
+.menu-item:hover {
+  background: #fad1e0;
+
+  color: #ec5e95;
+}
+
+/* ACTIVE */
+
+.menu-item.active {
+  background: linear-gradient(
+    135deg,
+    #ec5e95,
+    #f28ab0
+  );
+
+  color: white;
+
+  box-shadow:
+    0 10px 25px rgba(236,94,149,0.2);
+}
+
+/* LOGOUT */
+
+.logout {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  color: rgba(0,0,0,0.6);
+
+  cursor: pointer;
+
+  padding: 14px 10px;
+
+  transition: 0.3s;
+}
+
+.logout:hover {
+  color: #ec5e95;
+}
+
+/* =================================
+   SECTION
+================================= */
+
+.sidebar-section {
+  margin-top: 30px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+/* TITLE */
+
+.section-title {
+  font-size: 12px;
+
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  color: rgba(0,0,0,0.4);
+
+  margin-bottom: 8px;
+
+  padding-left: 8px;
+}
+
+/* SUB BUTTONS */
+
+.sub-item {
+  width: 100%;
+
+  border: none;
+
+  background: transparent;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 13px 16px;
+
+  border-radius: 16px;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+
+  color: rgba(0,0,0,0.7);
+
+  font-size: 14px;
+
+  font-family: "Poppins", sans-serif;
+
+  text-align: left;
+}
+
+/* HOVER */
+
+.sub-item:hover {
+  background: #FAF4F6;
+
+  color: #EC5E95;
+}
+
+/* DESIGN STUDIO BUTTON */
+
+.studio-btn {
+  margin-top: 10px;
+
+  background: linear-gradient(
+    90deg,
+    #EC5E95,
+    #F28AB0
+  );
+
+  color: white;
+
+  font-weight: 600;
+
+  box-shadow:
+    0 10px 25px rgba(236,94,149,0.18);
+}
+

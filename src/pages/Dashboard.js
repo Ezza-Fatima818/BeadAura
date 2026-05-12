@@ -1,86 +1,34 @@
-// Dashboard.jsx
-
 import React from "react";
+
 import "./Dashboard.css";
+
 import { useNavigate } from "react-router-dom";
 
-
-import {
-  Gem,
-  Palette,
-  Heart,
-  User,
-  LogOut,
-} from "lucide-react";
+import Sidebar from "../components/Sidebar";
 
 import bracelet from "../assets/bracelet.png";
+import bracelet1 from "../assets/bracelet1.png";
+import necklace from "../assets/necklace.png";
+import earring from "../assets/earring.png";
+import image from "../assets/image.png";
+import image1 from "../assets/image1.avif";
+import image2 from "../assets/image2.jpg";
 
 function Dashboard() {
 
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
+
+  const user = JSON.parse(
+    localStorage.getItem("user")
+  );
+
   return (
 
     <div className="dashboard">
 
-      {/* SIDEBAR */}
+      {/* REUSABLE SIDEBAR */}
 
-      <div className="sidebar">
-
-        <div className="sidebar-logo">
-          BeadAura <span>●</span>
-        </div>
-
-        <div className="sidebar-menu">
-
-  {/* DASHBOARD */}
-
-  <button
-    className="menu-item active"
-    onClick={() => navigate("/dashboard")}
-  >
-    <Gem size={20} />
-    <span>Dashboard</span>
-  </button>
-
-  {/* DESIGN STUDIO */}
-
-  <button
-    className="menu-item"
-    onClick={() => navigate("/designer")}
-  >
-    <Palette size={20} />
-    <span>Design Studio</span>
-  </button>
-
-  {/* SAVED DESIGNS */}
-
-  <button
-    className="menu-item"
-    onClick={() => navigate("/saved-designs")}
-  >
-    <Heart size={20} />
-    <span>Saved Designs</span>
-  </button>
-
-  {/* PROFILE */}
-
-  <button
-    className="menu-item"
-    onClick={() => navigate("/profile")}
-  >
-    <User size={20} />
-    <span>Profile</span>
-  </button>
-
-</div>
-
-        <div className="logout">
-          <LogOut size={20} />
-          <span>Logout</span>
-        </div>
-
-      </div>
+      <Sidebar active="dashboard" />
 
       {/* MAIN CONTENT */}
 
@@ -91,13 +39,15 @@ function Dashboard() {
         <div className="top-section">
 
           <div>
+
             <h1>
-              Welcome back, {user?.name} 
+              Welcome back, {user?.name}
             </h1>
 
             <p>
               Let’s create something beautiful today.
             </p>
+
           </div>
 
           <input
@@ -118,7 +68,7 @@ function Dashboard() {
 
           <div className="create-grid">
 
-            {/* CARD 1 */}
+            {/* BRACELET */}
 
             <div className="create-card">
 
@@ -132,21 +82,23 @@ function Dashboard() {
                 </p>
 
                 <button
-  onClick={() => navigate("/designer")}
->
-  Start Designing
-</button>
+                  onClick={() =>
+                    navigate("/designer")
+                  }
+                >
+                  Start Designing
+                </button>
 
               </div>
 
               <img
-                src={bracelet}
+                src={bracelet1}
                 alt="bracelet"
               />
 
             </div>
 
-            {/* CARD 2 */}
+            {/* NECKLACE */}
 
             <div className="create-card">
 
@@ -166,13 +118,13 @@ function Dashboard() {
               </div>
 
               <img
-                src={bracelet}
+                src={necklace}
                 alt="necklace"
               />
 
             </div>
 
-            {/* CARD 3 */}
+            {/* EARRINGS */}
 
             <div className="create-card">
 
@@ -192,7 +144,7 @@ function Dashboard() {
               </div>
 
               <img
-                src={bracelet}
+                src={earring}
                 alt="earrings"
               />
 
@@ -202,7 +154,7 @@ function Dashboard() {
 
         </div>
 
-        {/* RECENT DESIGNS */}
+        {/* INSPIRATIONS */}
 
         <div className="section">
 
@@ -217,47 +169,55 @@ function Dashboard() {
           <div className="recent-grid">
 
             <div className="recent-card">
+
               <img
-                src={bracelet}
+                src={image1}
                 alt=""
               />
 
               <h4>Pink Pearl</h4>
 
               <p>Edited 2 days ago</p>
+
             </div>
 
             <div className="recent-card">
+
               <img
-                src={bracelet}
+                src={image2}
                 alt=""
               />
 
               <h4>Lavender Love</h4>
 
               <p>Edited 5 days ago</p>
+
             </div>
 
             <div className="recent-card">
+
               <img
-                src={bracelet}
+                src={image}
                 alt=""
               />
 
               <h4>Golden Charm</h4>
 
               <p>Edited yesterday</p>
+
             </div>
 
             <div className="recent-card">
+
               <img
-                src={bracelet}
+                src={earring}
                 alt=""
               />
 
               <h4>Soft Blush</h4>
 
               <p>Edited 1 week ago</p>
+
             </div>
 
           </div>

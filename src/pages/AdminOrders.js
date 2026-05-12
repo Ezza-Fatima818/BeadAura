@@ -1,20 +1,28 @@
 import { useEffect, useState } from "react";
 
 export default function AdminOrders() {
+
   const [orders, setOrders] = useState([]);
-const [search, setSearch] = useState("");
-  // 🔥 FETCH ORDERS
+  const [search, setSearch] = useState("");
+
+  // FETCH ORDERS
   const fetchOrders = async () => {
+
     try {
-      const res = await fetch("http://localhost:5000/api/orders");
+
+      const res = await fetch(
+        "http://localhost:5000/api/orders"
+      );
+
       const data = await res.json();
 
-      console.log("ORDERS:", data);
-
       setOrders(Array.isArray(data) ? data : []);
+
     } catch (err) {
+
       console.error(err);
       setOrders([]);
+
     }
   };
 
@@ -22,238 +30,262 @@ const [search, setSearch] = useState("");
     fetchOrders();
   }, []);
 
-  // 🔥 UPDATE ORDER STATUS
+  // UPDATE STATUS
   const updateStatus = async (id, newStatus) => {
+
     try {
-      await fetch(`http://localhost:5000/api/orders/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
+
+      await fetch(
+        `http://localhost:5000/api/orders/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            status: newStatus,
+          }),
+        }
+      );
 
       fetchOrders();
+
     } catch (err) {
+
       console.error(err);
+
     }
   };
 
-  // 🔥 DELETE ORDER
+  // DELETE ORDER
   const deleteOrder = async (id) => {
+
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this order?"
+      "Delete this order?"
     );
 
     if (!confirmDelete) return;
 
     try {
-      await fetch(`http://localhost:5000/api/orders/${id}`, {
-        method: "DELETE",
-      });
+
+      await fetch(
+        `http://localhost:5000/api/orders/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       fetchOrders();
+
     } catch (err) {
+
       console.error(err);
+
     }
   };
 
+  // SEARCH
   const filteredOrders = orders.filter((o) => {
-  const searchText = search.toLowerCase();
+
+    const searchText = search.toLowerCase();
+
+    return (
+      o._id?.toLowerCase().includes(searchText) ||
+      o.userId?.name?.toLowerCase().includes(searchText) ||
+      o.paymentMethod?.toLowerCase().includes(searchText) ||
+      o.status?.toLowerCase().includes(searchText)
+    );
+  });
 
   return (
-    o._id?.toLowerCase().includes(searchText) ||
-    o.userId?.name?.toLowerCase().includes(searchText) ||
-    o.paymentMethod?.toLowerCase().includes(searchText) ||
-    o.status?.toLowerCase().includes(searchText)
-  );
-});
 
-  return (
-    <div style={{ padding: "20px" }}>
-      <h2 style={{ marginBottom: "20px" }}>All Orders</h2>
+    <div>
 
-      {orders.length === 0 ? (
-        <p>No orders found</p>
-      ) : (
-        <div style={{ overflowX: "auto" }}>
+      {/* HEADER */}
+      <div className="orders-header">
 
-<div
-  style={{
-    marginBottom: "20px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-  }}
->
-  <input
-    type="text"
-    placeholder="Search by Order ID, User, Status..."
-    value={search}
-    onChange={(e) => setSearch(e.target.value)}
-    style={{
-      padding: "12px",
-      width: "350px",
-      borderRadius: "10px",
-      border: "1px solid #ccc",
-      outline: "none",
-      fontSize: "14px",
-    }}
-  />
-</div>
+        <div>
 
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              background: "#fff",
-              borderRadius: "10px",
-              overflow: "hidden",
-            }}
-          >
-            <thead>
-              <tr style={{ background: "#111827", color: "#fff" }}>
-                <th style={thStyle}>Order ID</th>
-                <th style={thStyle}>User</th>
-                <th style={thStyle}>Products</th>
-                <th style={thStyle}>Product ID</th>
-                <th style={thStyle}>Seller ID</th>
-                <th style={thStyle}>Total</th>
-                <th style={thStyle}>Payment Method</th>
-                <th style={thStyle}>Payment Status</th>
-                <th style={thStyle}>Order Status</th>
-                <th style={thStyle}>Edit Status</th>
-                <th style={thStyle}>Delete</th>
-              </tr>
-            </thead>
+          <h2 className="orders-title">
+            All Orders
+          </h2>
 
-            <tbody>
-              {filteredOrders.map((o) => (
+          <p className="orders-subtitle">
+            Manage customer jewelry orders
+          </p>
+
+        </div>
+
+        {/* SEARCH */}
+        <input
+          type="text"
+          placeholder="Search orders..."
+          value={search}
+          onChange={(e) =>
+            setSearch(e.target.value)
+          }
+          className="orders-search"
+        />
+
+      </div>
+
+      {/* TABLE */}
+      <div className="orders-table-container">
+
+        <table className="orders-table">
+
+          <thead>
+
+            <tr>
+
+              <th>Order ID</th>
+              <th>User</th>
+              <th>Products</th>
+              <th>Total</th>
+              <th>Payment</th>
+              <th>Status</th>
+              <th>Update</th>
+              <th>Action</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            {filteredOrders.length > 0 ? (
+
+              filteredOrders.map((o) => (
+
                 <tr key={o._id}>
+
                   {/* ORDER ID */}
-                  <td style={tdStyle}>{o._id}</td>
+                  <td>{o._id}</td>
 
                   {/* USER */}
-                  <td style={tdStyle}>
-                    {o.userId?.name || o.userId?.email || "Unknown"}
+                  <td className="order-user">
+
+                    {o.userId?.name ||
+                      o.userId?.email ||
+                      "Unknown"}
+
                   </td>
 
                   {/* PRODUCTS */}
-                  <td style={tdStyle}>
-                    {o.products?.map((p, index) => (
-                      <div key={index}>
-                        {p.productId?.name} × {p.quantity}
-                      </div>
-                    ))}
-                  </td>
-                  <td style={tdStyle}>
-  {o.products?.map((p, index) => (
-    <div key={index}>
-      {p.productId?._id || "Custom Product"}
-    </div>
-  ))}
-</td>
+                  <td>
 
-<td style={tdStyle}>
-  {o.products?.map((p, index) => (
-    <div key={index}>
-      {p.productId?.sellerId || "No Seller"}
-    </div>
-  ))}
-</td>
+                    {o.products?.map((p, index) => (
+
+                      <div key={index}>
+
+                        {p.productId?.name} × {p.quantity}
+
+                      </div>
+
+                    ))}
+
+                  </td>
 
                   {/* TOTAL */}
-                  <td style={tdStyle}>Rs. {o.totalAmount}</td>
-
-                  {/* PAYMENT METHOD */}
-                  <td style={tdStyle}>{o.paymentMethod}</td>
-
-                  {/* PAYMENT STATUS */}
-                  <td style={tdStyle}>{o.paymentStatus}</td>
-
-                  {/* ORDER STATUS */}
-                  <td style={tdStyle}>
-                    <span
-                      style={{
-                        padding: "5px 10px",
-                        borderRadius: "20px",
-                        background:
-                          o.status === "Delivered"
-                            ? "#d1fae5"
-                            : o.status === "Cancelled"
-                            ? "#fee2e2"
-                            : o.status === "Shipped"
-                            ? "#dbeafe"
-                            : "#fef3c7",
-                        color:
-                          o.status === "Delivered"
-                            ? "green"
-                            : o.status === "Cancelled"
-                            ? "red"
-                            : o.status === "Shipped"
-                            ? "blue"
-                            : "#92400e",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {o.status}
-                    </span>
+                  <td>
+                    Rs. {o.totalAmount}
                   </td>
 
-                  {/* EDIT STATUS */}
-                  <td style={tdStyle}>
+                  {/* PAYMENT */}
+                  <td>
+                    {o.paymentMethod}
+                  </td>
+
+                  {/* STATUS */}
+                  <td>
+
+                    <span
+                      className={`order-status ${o.status.toLowerCase()}`}
+                    >
+
+                      {o.status}
+
+                    </span>
+
+                  </td>
+
+                  {/* UPDATE */}
+                  <td>
+
                     <select
                       value={o.status}
                       onChange={(e) =>
-                        updateStatus(o._id, e.target.value)
+                        updateStatus(
+                          o._id,
+                          e.target.value
+                        )
                       }
-                      style={{
-                        padding: "8px",
-                        borderRadius: "6px",
-                      }}
+                      className="orders-select"
                     >
-                      <option value="Pending">Pending</option>
-                      <option value="Shipped">Shipped</option>
-                      <option value="Delivered">Delivered</option>
-                      <option value="Cancelled">Cancelled</option>
+
+                      <option value="Pending">
+                        Pending
+                      </option>
+
+                      <option value="Shipped">
+                        Shipped
+                      </option>
+
+                      <option value="Delivered">
+                        Delivered
+                      </option>
+
+                      <option value="Cancelled">
+                        Cancelled
+                      </option>
+
                     </select>
+
                   </td>
 
                   {/* DELETE */}
-                  <td style={tdStyle}>
+                  <td>
+
                     <button
-                      onClick={() => deleteOrder(o._id)}
-                      style={{
-                        background: "red",
-                        color: "#fff",
-                        border: "none",
-                        padding: "8px 14px",
-                        borderRadius: "6px",
-                        cursor: "pointer",
-                      }}
+                      className="order-delete-btn"
+                      onClick={() =>
+                        deleteOrder(o._id)
+                      }
                     >
+
                       Delete
+
                     </button>
+
                   </td>
+
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+
+              ))
+
+            ) : (
+
+              <tr>
+
+                <td
+                  colSpan="8"
+                  className="no-orders"
+                >
+
+                  No orders found
+
+                </td>
+
+              </tr>
+
+            )}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
     </div>
   );
 }
-
-// 🔥 TABLE HEADER STYLE
-const thStyle = {
-  padding: "14px",
-  textAlign: "left",
-  borderBottom: "1px solid #ddd",
-};
-
-// 🔥 TABLE DATA STYLE
-const tdStyle = {
-  padding: "14px",
-  borderBottom: "1px solid #eee",
-};

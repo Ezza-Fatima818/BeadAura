@@ -1,149 +1,320 @@
-/* ===== MAIN PAGE ===== */
-.canvas-area {
-  width: 100%;
+/* =================================
+   FULL PAGE
+================================= */
+
+.studio-page {
+  display: flex;
+
+  height: 100vh;
+
+  background: #faf4f6;
+
+  overflow: hidden;
+
+  font-family: "Poppins", sans-serif;
 }
 
-/* ===== TOP BAR ===== */
+/* =================================
+   RIGHT SIDE
+================================= */
+
+.canvas-area {
+  flex: 1;
+
+  display: flex;
+
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+/* =================================
+   TOP BAR
+================================= */
+
 .top-bar {
   width: 100%;
+
   display: flex;
+
   justify-content: space-between;
-  padding: 15px 25px;
+
+  align-items: center;
+
+  padding: 18px 30px;
+
   background: white;
-  border-bottom: 1px solid #eee;
-  position: sticky;
-  top: 0;
+
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+
   z-index: 100;
 }
 
+/* =================================
+   CATEGORIES
+================================= */
+
+.categories {
+  display: flex;
+
+  align-items: center;
+
+  gap: 24px;
+}
+
 .categories span {
-  margin-right: 20px;
   cursor: pointer;
-  color: #666;
+
+  color: rgba(0,0,0,0.6);
+
   font-weight: 500;
+
+  transition: 0.3s ease;
 }
 
 .categories span:hover {
-  color: black;
+  color: #EC5E95;
 }
 
-/* ===== MAIN LAYOUT ===== */
+/* =================================
+   MAIN LAYOUT
+================================= */
+
 .main-layout {
+  flex: 1;
+
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  gap: 30px;
-  padding: 20px 30px;
+
+  gap: 20px;
+
+  padding: 20px;
+
+  overflow: hidden;
 }
 
-/* ===== PALETTE ===== */
+/* =================================
+   PALETTE
+================================= */
 
+.palette {
+  width: 320px;
 
-/* ===== CANVAS ===== */
-.bracelet-area {
-  width: 1000px;
-  height: 3000px;
   background: white;
-  border-radius: 20px;
-  box-shadow: 0px 5px 20px rgba(0,0,0,0.08);
+
+  border-radius: 28px;
+
+  padding: 24px;
+
+  overflow-y: auto;
+
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.04);
+}
+
+/* =================================
+   CANVAS AREA
+================================= */
+
+.bracelet-area {
+  flex: 1;
+
+  background: white;
+
+  border-radius: 32px;
 
   position: relative;
-  overflow: hidden;
-  margin: 0 auto;  /* 🔥 important */
+
+  overflow: auto;
+
+  box-shadow:
+    0 10px 40px rgba(0,0,0,0.06);
+
+  padding: 40px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: flex-start;
 }
 
-/* ===== PLACEHOLDERS ===== */
+/* =================================
+   INNER CANVAS
+================================= */
+
+.canvas-content {
+  width: 1000px;
+
+  min-height: 1400px;
+
+  background: #fff;
+
+  border-radius: 28px;
+
+  position: relative;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(0,0,0,0.05);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(0,0,0,0.02);
+}
+
+/* =================================
+   PLACEHOLDERS
+================================= */
+
 .placeholder-bead {
   width: 25px;
+
   height: 25px;
-  border: 2px dashed #b388ff;
+
+  border: 2px dashed #F28AB0;
+
   border-radius: 50%;
+
   position: absolute;
+
   transform: translate(-50%, -50%);
-  background: #ede9ff;
+
+  background: #FAF4F6;
+
   z-index: 1;
+
+  transition: 0.3s ease;
 }
 
 .placeholder-bead:hover {
-  background: #d8b4fe;
-  transform: translate(-50%, -50%) scale(1.2);
+  background: #FAD1E0;
+
+  transform:
+    translate(-50%, -50%)
+    scale(1.15);
 }
+
+/* ACTIVE */
 
 .active-placeholder {
-  border: 3px solid purple;
-  background: #f3e8ff;
-  transform: translate(-50%, -50%) scale(1.1);
+  border: 3px solid #EC5E95;
+
+  background: #FAD1E0;
+
+  transform:
+    translate(-50%, -50%)
+    scale(1.1);
 }
 
-/* ===== BEADS ===== */
+/* =================================
+   BEADS
+================================= */
+
 .bead-item {
   position: absolute;
+
   transform: translate(-50%, -50%);
+
   z-index: 10;
+
   cursor: pointer;
+
+  transition: 0.2s ease;
 }
 
-/* ===== TEXT ===== */
+.bead-item:hover {
+  transform:
+    translate(-50%, -50%)
+    scale(1.08);
+}
+
+/* =================================
+   EMPTY TEXT
+================================= */
+
 .canvas-text {
   position: absolute;
+
   top: 30%;
+
   left: 50%;
+
   transform: translateX(-50%);
+
   text-align: center;
-  font-family: "Permanent Marker", cursive;
-  color: #8e44ad;
 }
 
-/* ===== PREVIEW ===== */
+.canvas-text h1 {
+  font-size: 42px;
+
+  color: #EC5E95;
+
+  font-weight: 700;
+}
+
+/* =================================
+   PREVIEW IMAGE
+================================= */
+
 .bracelet-preview {
   position: absolute;
+
   top: 70%;
+
   left: 50%;
+
   transform: translate(-50%, -50%);
-  width: 400px;
-  opacity: 0.3;
+
+  width: 420px;
+
+  opacity: 0.15;
 }
 
-/* ===== BUTTONS ===== */
-.button-group {
-  margin-top: 20px;
-}
+/* =================================
+   SAVE BUTTON
+================================= */
 
-.button-group button {
-  margin-right: 10px;
-  padding: 10px 20px;
-  border-radius: 20px;
-  border: none;
-  background: linear-gradient(135deg, #ff7eb3, #8e44ad);
-  color: white;
-  cursor: pointer;
-}
-
-/* ===== HOVER ===== */
-.bracelet-area:hover {
-  box-shadow: 0 0 30px rgba(160,130,255,0.25);
-}
 .button-group {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+
+  bottom: 25px;
+
+  right: 30px;
+
   display: flex;
+
   gap: 12px;
+
   z-index: 1000;
 }
 
 .button-group button {
-  padding: 10px 16px;
+  padding: 14px 24px;
+
   border: none;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #b993d6, #8ca6db);
+
+  border-radius: 40px;
+
+  background: linear-gradient(
+    90deg,
+    #EC5E95,
+    #F28AB0
+  );
+
   color: white;
-  font-weight: 500;
+
+  font-weight: 600;
+
   cursor: pointer;
-  transition: 0.3s;
+
+  transition: 0.3s ease;
+
+  box-shadow:
+    0 10px 25px rgba(236,94,149,0.18);
 }
 
 .button-group button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+
+  box-shadow:
+    0 15px 30px rgba(236,94,149,0.24);
 }

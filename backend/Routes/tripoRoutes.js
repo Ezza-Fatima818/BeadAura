@@ -21,7 +21,7 @@ router.post(
             "Content-Type": "application/json",
 
             Authorization:
-              "Bearer tsk_FF12PDH7N7a5b890m_2u6x_cm9hwLF-9t310gT4Xc-Z",
+              "Bearer tsk_9_Tyn5SOljPJD6KQ1Z0w34KnEUNtz6GR1vsP_iod4l6",
           },
 
           body: JSON.stringify({
@@ -69,7 +69,7 @@ router.get(
             "Content-Type": "application/json",
 
             Authorization:
-              "Bearer tsk_FF12PDH7N7a5b890m_2u6x_cm9hwLF-9t310gT4Xc-Z",
+              "Bearer tsk_9_Tyn5SOljPJD6KQ1Z0w34KnEUNtz6GR1vsP_iod4l6",
           },
         }
       );

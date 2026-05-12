@@ -1,15 +1,31 @@
+/* RESET */
+
+* {
+  margin: 0;
+
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+.login-page {
+  overflow: hidden;
+}
+
 /* PAGE */
 
 .login-page {
-  min-height: 100vh;
+  height: 100vh;
 
   display: flex;
+
   justify-content: center;
+
   align-items: center;
 
   background: white;
 
-  padding: 40px;
+  padding: 20px;
 
   font-family: "Poppins", sans-serif;
 }
@@ -18,7 +34,8 @@
 
 .login-card {
   width: 1150px;
-  height: 720px;
+
+  height: 680px;
 
   background: white;
 
@@ -37,10 +54,12 @@
 .login-left {
   flex: 1;
 
-  padding: 70px;
+  padding: 50px 70px;
 
   display: flex;
+
   flex-direction: column;
+
   justify-content: center;
 }
 
@@ -53,7 +72,7 @@
 
   color: #EC5E95;
 
-  margin-bottom: 40px;
+  margin-bottom: 28px;
 }
 
 .login-logo span {
@@ -63,13 +82,13 @@
 /* TITLE */
 
 .login-left h1 {
-  font-size: 54px;
+  font-size: 48px;
 
   line-height: 1.1;
 
   color: rgba(0,0,0,0.88);
 
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 /* SUBTITLE */
@@ -77,33 +96,37 @@
 .subtitle {
   color: rgba(0,0,0,0.6);
 
-  line-height: 1.8;
+  line-height: 1.7;
 
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 
   max-width: 420px;
+
+  font-size: 14px;
 }
 
 /* FORM */
 
 form {
   display: flex;
+
   flex-direction: column;
 
-  gap: 25px;
+  gap: 18px;
 }
 
 /* INPUT GROUP */
 
 .input-group {
   display: flex;
+
   flex-direction: column;
 
-  gap: 12px;
+  gap: 8px;
 }
 
 .input-group label {
-  font-size: 15px;
+  font-size: 14px;
 
   font-weight: 500;
 
@@ -113,15 +136,15 @@ form {
 /* INPUTS */
 
 .input-group input {
-  padding: 18px 20px;
+  padding: 15px 18px;
 
-  border-radius: 18px;
+  border-radius: 16px;
 
   border: 1px solid rgba(0,0,0,0.08);
 
   outline: none;
 
-  font-size: 15px;
+  font-size: 14px;
 
   transition: 0.3s ease;
 }
@@ -137,12 +160,14 @@ form {
 
 .password-row {
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
 }
 
 .password-row span {
-  font-size: 14px;
+  font-size: 13px;
 
   color: #EC5E95;
 
@@ -152,9 +177,9 @@ form {
 /* BUTTON */
 
 form button {
-  margin-top: 10px;
+  margin-top: 8px;
 
-  padding: 18px;
+  padding: 16px;
 
   border: none;
 
@@ -168,7 +193,8 @@ form button {
 
   color: white;
 
-  font-size: 16px;
+  font-size: 15px;
+
   font-weight: 600;
 
   cursor: pointer;
@@ -190,7 +216,7 @@ form button:hover {
 
   background: rgba(0,0,0,0.06);
 
-  margin: 35px 0 25px;
+  margin: 20px 0 16px;
 }
 
 /* SIGNUP */
@@ -198,22 +224,37 @@ form button:hover {
 .signup-text {
   color: rgba(0,0,0,0.6);
 
-  margin-bottom: 15px;
+  display: flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  font-size: 14px;
 }
 
 .create-btn {
-  width: fit-content;
-
   background: transparent;
 
   border: none;
 
+  padding: 0;
+
+  margin: 0;
+
   color: #EC5E95;
 
-  font-size: 16px;
+  font-size: 14px;
+
   font-weight: 600;
 
   cursor: pointer;
+
+  width: fit-content;
+}
+
+.create-btn:hover {
+  opacity: 0.8;
 }
 
 /* RIGHT */
@@ -228,7 +269,9 @@ form button:hover {
   background: #FAF4F6;
 
   display: flex;
+
   justify-content: center;
+
   align-items: center;
 }
 
@@ -236,6 +279,7 @@ form button:hover {
 
 .login-right img {
   width: 100%;
+
   height: 100%;
 
   object-fit: cover;
@@ -245,6 +289,7 @@ form button:hover {
 
 .overlay {
   position: absolute;
+
   inset: 0;
 
   background:
@@ -262,33 +307,47 @@ form button:hover {
 .right-content {
   position: absolute;
 
-  bottom: 60px;
-  left: 60px;
+  bottom: 50px;
+
+  left: 50px;
 
   z-index: 2;
 
   color: white;
 
-  max-width: 400px;
+  max-width: 360px;
 }
 
 .right-content h2 {
-  font-size: 52px;
+  font-size: 46px;
 
   line-height: 1.1;
 
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .right-content p {
-  line-height: 1.8;
+  line-height: 1.7;
 
   color: rgba(255,255,255,0.85);
+
+  font-size: 14px;
 }
 
 /* RESPONSIVE */
 
 @media (max-width: 992px) {
+
+  html,
+  body {
+    overflow: auto;
+  }
+
+  .login-page {
+    height: auto;
+
+    padding: 20px;
+  }
 
   .login-card {
     flex-direction: column;
@@ -297,15 +356,15 @@ form button:hover {
   }
 
   .login-right {
-    height: 350px;
+    height: 320px;
   }
 
   .login-left {
-    padding: 40px;
+    padding: 35px;
   }
 
   .login-left h1 {
-    font-size: 42px;
+    font-size: 40px;
   }
 
 }

@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import "./SavedDesigns.css";
 import { useNavigate }
 from "react-router-dom";
+import Sidebar from "../components/Sidebar";
 
 
 export default function SavedDesigns() {
   const [designs, setDesigns] = useState([]);
   const [modelUrl, setModelUrl]= useState("");
   const [loading, setLoading] = useState(true);
+  const [previewImage,setPreviewImage] =useState(null);
   const navigate = useNavigate();
 
   
@@ -138,91 +140,234 @@ const checkStatus = async (taskId) => {
 };
 
   return (
-    <div className="dashboard-container">
 
-      {/* Header */}
-      <div className="dashboard-header">
+  <div className="dashboard">
+
+    {/* SIDEBAR */}
+
+    <Sidebar active="saved" />
+
+    {/* MAIN */}
+
+    <div className="dashboard-content">
+
+      {/* TOP */}
+
+      <div className="top-section">
+
         <div>
-          <h1>Welcome ✨</h1>
-          <p>Start designing something beautiful</p>
+
+          <h1>
+            Saved Designs 
+          </h1>
+
+          <p>
+            Your custom jewelry collection
+          </p>
+
         </div>
+
       </div>
 
-      {/* Section Title */}
-      <h2 className="section-title">Your Designs</h2>
+      {/* LOADING */}
 
-      {/* Loading */}
       {loading && (
-        <p className="empty-text">Loading designs...</p>
+
+        <p className="empty-text">
+          Loading designs...
+        </p>
+
       )}
 
-      {/* Empty State */}
-      {!loading && designs.length === 0 && (
-        <p className="empty-text">No designs yet</p>
+      {/* EMPTY */}
+
+      {!loading &&
+        designs.length === 0 && (
+
+        <div className="empty-state">
+
+          <h3>
+            No saved designs yet
+          </h3>
+
+          <p>
+            Start designing your first
+            jewelry piece.
+          </p>
+
+          <button
+            onClick={() =>
+              navigate("/designer")
+            }
+          >
+            Start Designing
+          </button>
+
+        </div>
+
       )}
 
-      {/* Grid */}
+      {/* GRID */}
+
       <div className="designs-grid">
+
         {designs.map((design) => (
-          <div className="design-card" key={design._id}>
 
-            {/* Image */}
+          <motion.div
+            className="design-card"
+
+            key={design._id}
+
+            whileHover={{
+              y: -8,
+            }}
+          >
+
+            {/* IMAGE */}
+
             {design.imageUrl && (
+
               <motion.img
-  src={design.imageUrl}
-  alt="design"
-  className="design-image"
 
-  animate={{
-    y: [0, -8, 0],
-    rotate: [-1, 1, -1],
-  }}
+                src={design.imageUrl}
 
-  transition={{
-    repeat: Infinity,
-    duration: 4,
-    ease: "easeInOut",
-  }}
+                alt="design"
 
-  whileHover={{
-    scale: 1.05,
-  }}
-/>
+                className="design-image"
+
+                animate={{
+                  y: [0, -5, 0],
+                }}
+
+                transition={{
+                  repeat: Infinity,
+                  duration: 4,
+                  ease: "easeInOut",
+                }}
+              />
+
             )}
 
-            {/* Info */}
+            {/* INFO */}
+
             <div className="design-info">
 
-              <h3>
-                {design.material || "Custom Design"}
-              </h3>
+              <div className="design-top">
 
-              <p>
+                <h3>
+                  {design.material ||
+                    "Custom Design"}
+                </h3>
+
+                <div
+                  className={`status ${
+                    design.status?.toLowerCase()
+                  }`}
+                >
+                  {design.status}
+                </div>
+
+              </div>
+
+              <p className="design-description">
                 {design.description}
               </p>
 
               <div className="design-meta">
-                <span>{design.color}</span>
-                <span>{design.occasion}</span>
+
+                <span>
+                  {design.color}
+                </span>
+
+                <span>
+                  {design.occasion}
+                </span>
+
               </div>
 
-              {/* Status */}
-              <div className={`status ${design.status?.toLowerCase()}`}>
-                {design.status}
-              </div>
+              {/* ACTIONS */}
 
-<button
-  onClick={() => generate3D(design.imageUrl)}
-  className="generate-btn"
->
-  Generate 3D
-</button>
+              <div className="design-actions">
+
+  <button
+    className="preview-btn"
+
+    onClick={() =>
+      setPreviewImage(
+        design.imageUrl
+      )
+    }
+  >
+    Preview
+  </button>
+
+  <button
+    className="generate-btn"
+
+    onClick={() =>
+      generate3D(
+        design.imageUrl
+      )
+    }
+  >
+    Generate 3D
+  </button>
+
+</div>
+
             </div>
 
-          </div>
+          </motion.div>
+
         ))}
+
       </div>
 
     </div>
-  );
+
+    {/* PREVIEW MODAL */}
+
+{previewImage && (
+
+  <div
+    className="preview-modal"
+
+    onClick={() =>
+      setPreviewImage(null)
+    }
+  >
+
+    <div
+      className="preview-content"
+
+      onClick={(e) =>
+        e.stopPropagation()
+      }
+    >
+
+      <img
+        src={previewImage}
+
+        alt="preview"
+      />
+
+      <button
+        className="close-preview"
+
+        onClick={() =>
+          setPreviewImage(null)
+        }
+      >
+        ✕
+      </button>
+
+    </div>
+
+  </div>
+
+)}
+
+  </div>
+
+);
 }
