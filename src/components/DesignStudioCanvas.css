@@ -1,3 +1,7 @@
+/* =================================
+   DESIGN STUDIO CANVAS
+================================= */
+
 .design-studio-canvas {
   position: relative;
 
@@ -14,20 +18,22 @@
   overflow: visible;
 }
 
-/* ================================
+/* =================================
    CANVAS LAYERS
-================================ */
+================================= */
 
 .canvas-layer {
-  .canvas-layer {
-  position: relative;
+  position: absolute;
+
+  top: 0;
+  left: 0;
 
   width: 100%;
-
-  min-height: 3000px;
+  height: 3000px;
 
   z-index: 5;
-}
+
+  background: transparent;
 }
 
 .drawing-canvas {
@@ -46,9 +52,9 @@
   display: block;
 }
 
-/* ================================
+/* =================================
    COMMON ITEMS
-================================ */
+================================= */
 
 .canvas-item {
   position: absolute;
@@ -56,6 +62,8 @@
   cursor: grab;
 
   user-select: none;
+
+ 
 }
 
 .canvas-item:active {
@@ -64,35 +72,44 @@
 
 .selected-item {
   border: 2px solid #7c3aed;
+
+ 
 }
 
-/* ================================
+/* =================================
    IMAGES + BEADS
-================================ */
+================================= */
 
 .design-image,
-.design-bead {
+.design-bead,
+.design-chain {
   width: 100%;
+
   height: 100%;
 
   object-fit: contain;
 
+  display: block;
+
+ 
   pointer-events: none;
 
-  display: block;
+  background: transparent !important;
 }
 
-/* ================================
+/* =================================
    HANDLES
-================================ */
+================================= */
 
 .resize-handle {
   position: absolute;
 
   right: -6px;
+
   bottom: -6px;
 
   width: 14px;
+
   height: 14px;
 
   background: #7c3aed;
@@ -101,18 +118,20 @@
 
   cursor: nwse-resize;
 
-  z-index: 30;
+  z-index: 999;
 }
 
 .rotate-handle {
   position: absolute;
 
   top: -30px;
+
   left: 50%;
 
   transform: translateX(-50%);
 
   width: 16px;
+
   height: 16px;
 
   background: #0ea5e9;
@@ -121,16 +140,17 @@
 
   cursor: grab;
 
-  z-index: 40;
+  z-index: 999;
 }
 
-/* ================================
+/* =================================
    ACTION BUTTONS
-================================ */
+================================= */
 
 .delete-btn,
 .duplicate-btn {
   width: 22px;
+
   height: 22px;
 
   border-radius: 50%;
@@ -145,7 +165,7 @@
 
   cursor: pointer;
 
-  z-index: 40;
+  z-index: 9999;
 
   position: absolute;
 
@@ -153,11 +173,12 @@
 
   font-weight: bold;
 
-  pointerEvents: "auto";
+  pointer-events: auto;
 }
 
 .delete-btn {
   top: -10px;
+
   right: -10px;
 
   background: #ef4444;
@@ -165,14 +186,15 @@
 
 .duplicate-btn {
   top: -10px;
+
   left: -10px;
 
   background: #22c55e;
 }
 
-/* ================================
+/* =================================
    SHAPE HELPERS
-================================ */
+================================= */
 
 .shape-circle {
   border-radius: 50%;
@@ -219,17 +241,11 @@
 .shape-teardrop {
   transform: rotate(45deg);
 }
-.design-chain {
-  width: 100%;
 
-  height: 100%;
+/* =================================
+   CHAIN ITEMS
+================================= */
 
-  object-fit: contain;
-
-  pointer-events: none;
-
-  display: block;
-}
 .chain-item {
   position: absolute;
 
@@ -238,14 +254,14 @@
   cursor: grab;
 
   user-select: none;
+
+  background: transparent;
 }
 
 .chain-item:active {
   cursor: grabbing;
 }
-.resize-handle {
-  z-index: 999;
-}
+
 .chain-svg {
   position: absolute;
 
@@ -260,8 +276,12 @@
   pointer-events: none;
 }
 
+/* =================================
+   CURVE POINTS
+================================= */
+
 .curve-point {
-   width: 14px;
+  width: 14px;
 
   height: 14px;
 
@@ -269,15 +289,16 @@
 
   border-radius: 50%;
 
-  transform:
-    translate(-50%, -50%);
-
   cursor: grab;
 
   z-index: 9999;
 }
-.save-design-btn {
 
+/* =================================
+   SAVE BUTTON
+================================= */
+
+.save-design-btn {
   position: fixed;
 
   bottom: 30px;
@@ -303,10 +324,9 @@
   z-index: 9999;
 
   box-shadow:
-    0 10px 25px rgba(0,0,0,0.15);
+    0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 .save-design-btn:hover {
-
   background: #5b21b6;
 }

@@ -7,6 +7,6 @@ export const jewelryComponents = [
     color: "#D4AF37"
   },
 
- 
+
 
 ];

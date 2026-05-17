@@ -9,6 +9,9 @@ from "./JewelryComponents/ComponentItem";
 import "./Palette.css";
 
 import Bead from "./Bead";
+import { chains }  from "./chains/Data/ChainData";
+import ChainItem from "./chains/Data/ChainItem";
+import GoldChain from "./chains/Data/GoldChain";
 
 export default function Palette({
   mode,
@@ -466,32 +469,32 @@ if (
 
       {/* CHAINS */}
 
-      <div className="section">
+<div className="section">
 
-        <h4>Chains</h4>
+  <h4>Chains</h4>
 
-        <div className="beadGrid">
+  <div className="beadGrid">
 
-          <div className="beadItem">
+    {chains.map((item) => (
 
-            <Bead
-              src="/beads/assets/chains/GoldenChain.svg"
-              type="CHAIN"
-            />
+      <div
+        className="beadItem"
+        key={item.id}
+      >
 
-            <span className="beadName">
-              Gold Chain
-            </span>
-
-          </div>
-
-        </div>
+        <ChainItem item={item} />
 
       </div>
 
-      {/* COMPONENTS */}
+    ))}
+
+  </div>
+
+</div>
 
       {/* COMPONENTS */}
+
+     
 
 <div className="section">
 
@@ -503,22 +506,18 @@ if (
 
     {jewelryComponents.map((item) => (
 
-  <div
-    className="beadItem"
-    key={item.id}
-  >
+      <div
+        className="beadItem"
+        key={item.id}
+      >
 
-    <ComponentItem
-      item={item}
-    />
+        <ComponentItem
+          item={item}
+        />
 
-    <span className="beadName">
-      {item.name}
-    </span>
+      </div>
 
-  </div>
-
-))}
+    ))}
 
   </div>
 
@@ -534,7 +533,7 @@ if (
           style={{
             display: "block",
             background:
-              "linear-gradient(135deg, #b388ff, #8e44ad)",
+              "#EC5E95",
             color: "white",
             padding: "10px",
             borderRadius: "10px",

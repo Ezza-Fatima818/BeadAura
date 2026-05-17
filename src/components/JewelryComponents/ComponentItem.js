@@ -68,6 +68,35 @@ export default function ComponentItem({ item }) {
 
         </div>
 
+      ) : item.type === "string" ? (
+
+        <div
+          style={{
+            width: "60px",
+            height: "45px",
+
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+
+          <svg
+            width="60"
+            height="40"
+            viewBox="0 0 60 40"
+          >
+            <path
+              d="M 5 20 Q 30 5 55 20"
+              stroke={item.color}
+              strokeWidth="4"
+              fill="transparent"
+              strokeLinecap="round"
+            />
+          </svg>
+
+        </div>
+
       ) : (
 
         <div>No Component</div>

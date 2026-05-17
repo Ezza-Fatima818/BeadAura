@@ -18,12 +18,15 @@ export default function PropertiesPanel({
   rotateElement,
 
 selectedBraceletBead,
+selectedBuilderBead,
 
 resizeBraceletBead,
 
 deleteBraceletBead,
 
 fillBracelet,
+changeShapeColor,
+changeBuilderBeadColor,
 
 }) {
 
@@ -174,6 +177,8 @@ fillBracelet,
      UI
   ========================= */
 
+  
+
   return (
 
     <div className="properties-panel">
@@ -279,6 +284,8 @@ fillBracelet,
           }}>
             Placeholder Controls
           </h3>
+
+
 
           {/* SIZE */}
 
@@ -422,7 +429,10 @@ fillBracelet,
    BRACELET CONTROLS
 ===================== */}
 
-{selectedBraceletBead && (
+{/* =====================
+   BRACELET CONTROLS
+===================== */}
+{selectedBuilderBead && (
 
   <>
 
@@ -432,31 +442,24 @@ fillBracelet,
       Bracelet Bead
     </h3>
 
-    {/* SIZE */}
+    {/* COLOR */}
 
     <label>
-      Size
+      Color
     </label>
 
     <input
-      type="range"
-
-      min="20"
-
-      max="80"
-
-      value={
-        selectedBraceletBead
-          ?.size || 36
-      }
+      type="color"
 
       onChange={(e) =>
 
-        resizeBraceletBead(
+        changeBuilderBeadColor(
           e.target.value
         )
       }
     />
+
+    
 
     {/* DELETE */}
 
@@ -582,6 +585,26 @@ fillBracelet,
 
         </>
       )}
+
+      {selectedIds.length > 0 && (
+
+  <div className="shape-controls">
+
+    <h3>Shape Color</h3>
+
+    <input
+      type="color"
+
+      onChange={(e) =>
+        changeShapeColor(
+          e.target.value
+        )
+      }
+    />
+
+  </div>
+
+)}
 
     </div>
   );

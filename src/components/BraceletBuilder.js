@@ -16,7 +16,8 @@ export default function BraceletBuilder({
 
   setSelectedIndex,
 
-  selectedBuilderBead
+  selectedBuilderBead,
+  template,
 
 }){
 
@@ -26,7 +27,11 @@ export default function BraceletBuilder({
 
   
 
-  const beadCount = 25;
+  const beadCount =
+
+  template?.beadCount ||
+
+  25;
 
   const centerX = 250;
 
@@ -52,9 +57,9 @@ export default function BraceletBuilder({
 
 const radius =
 
-  160 +
+  template?.radius ||
 
-  (maxBeadSize - 36) * 1.8;
+  170;
 
   
 
@@ -144,6 +149,8 @@ useEffect(() => {
      UI
   ========================= */
 
+  
+
   return (
 
     <div
@@ -184,6 +191,12 @@ useEffect(() => {
 
         {slots.map(
           (bead, index) => {
+            const slotStyle =
+
+  template?.slotStyles?.[
+    index
+  ];
+        
 
             const angle =
 
@@ -192,21 +205,25 @@ useEffect(() => {
 
               beadCount;
 
-            const x =
+       const x =
 
-              centerX +
+  centerX +
 
-              radius *
+  radius *
 
-                Math.cos(angle);
+    Math.cos(angle) +
+
+  (slotStyle?.offsetX || 0);
 
             const y =
 
-              centerY +
+  centerY +
 
-              radius *
+  radius *
 
-                Math.sin(angle);
+    Math.sin(angle) +
+
+  (slotStyle?.offsetY || 0);
 
             return (
 
@@ -229,12 +246,20 @@ useEffect(() => {
                   top: y,
 
                   width:
-                    bead?.size ||
-                    38,
 
-                  height:
-                    bead?.size ||
-                    38,
+  slotStyle?.size ||
+
+  bead?.size ||
+
+  38,
+
+  height:
+
+  slotStyle?.size ||
+
+  bead?.size ||
+
+  38,
 
                   borderRadius:
                     "50%",

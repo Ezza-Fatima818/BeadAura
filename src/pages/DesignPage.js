@@ -57,6 +57,19 @@ import BraceletBuilder
 from "../components/BraceletBuilder";
 import EarringBuilder
 from "../components/EarringBuilder";
+import BraceletTemplates
+from "../components/templates/BraceletTemplates";
+import PatternBuilder
+from "../components/PatternBuilder";
+
+import EarringTemplates
+from "../components/templates/EarringTemplates";
+
+import NecklaceTemplates
+from "../components/templates/NecklaceTemplates";
+
+import NecklaceBuilder
+from "../components/NecklaceBuilder";
 
 
 
@@ -218,6 +231,14 @@ const [
 
 ] = useState(null);
 
+const [
+
+  selectedTemplate,
+
+  setSelectedTemplate
+
+] = useState(null);
+
 const selectedEarringBead =
 
   selectedEarringIndex !==
@@ -231,7 +252,8 @@ const selectedEarringBead =
 
 
   
-
+const updateColorRef =
+  useRef(null);
 
 
 //selectedbracelet bead
@@ -242,11 +264,140 @@ const selectedBraceletBead =
 
     ? braceletSlots[
         selectedBraceletIndex
-      ]
+      ] || {}
 
     : null;
 
-    const resizeBraceletBead =
+const changeBuilderBeadColor =
+(
+  color
+) => {
+
+  /* STUDIO BEADS */
+
+  if (
+  selectedBeadIndex !==
+  null
+) {
+
+  updateColorRef.current?.(
+    color
+  );
+
+  return;
+}
+
+  /* BRACELET */
+
+  if (
+
+    selectedCategory ===
+    "bracelets" &&
+
+    selectedBraceletIndex !==
+    null
+
+  ) {
+
+    const updated = [
+      ...braceletSlots
+    ];
+
+    updated[
+      selectedBraceletIndex
+    ] = {
+
+      ...updated[
+        selectedBraceletIndex
+      ],
+
+      color,
+    };
+
+    setBraceletSlots(
+      updated
+    );
+
+    return;
+  }
+
+  /* EARRINGS */
+
+  if (
+
+    selectedCategory ===
+    "earrings" &&
+
+    selectedEarringIndex !==
+    null
+
+  ) {
+
+    const updated = [
+      ...earringSlots
+    ];
+
+    updated[
+      selectedEarringIndex
+    ] = {
+
+      ...updated[
+        selectedEarringIndex
+      ],
+
+      color,
+    };
+
+    setEarringSlots(
+      updated
+    );
+  }
+
+};
+
+//delete bracelet
+
+const deleteBraceletBead =
+() => {
+
+  if (
+    selectedBraceletIndex ===
+    null
+  ) return;
+
+  const updated =
+    [...braceletSlots];
+
+  updated[
+    selectedBraceletIndex
+  ] = null;
+
+  setBraceletSlots(updated);
+};
+
+
+
+const fillBracelet = () => {
+
+  if (
+    !selectedBuilderBead
+  ) return;
+
+  const updated =
+
+    braceletSlots.map(
+      () => ({
+
+        ...selectedBuilderBead,
+
+        size: 36
+      })
+    );
+
+  setBraceletSlots(updated);
+};
+
+const resizeBraceletBead =
 (size) => {
 
   if (
@@ -268,45 +419,6 @@ const selectedBraceletBead =
     size:
       Number(size)
   };
-
-  setBraceletSlots(updated);
-};
-
-//delete bracelet
-const deleteBraceletBead =
-() => {
-
-  if (
-    selectedBraceletIndex ===
-    null
-  ) return;
-
-  const updated =
-    [...braceletSlots];
-
-  updated[
-    selectedBraceletIndex
-  ] = null;
-
-  setBraceletSlots(updated);
-};
-
-const fillBracelet = () => {
-
-  if (
-    !selectedBuilderBead
-  ) return;
-
-  const updated =
-
-    braceletSlots.map(
-      () => ({
-
-        ...selectedBuilderBead,
-
-        size: 36
-      })
-    );
 
   setBraceletSlots(updated);
 };
@@ -396,56 +508,54 @@ const fillBracelet = () => {
      IMAGE UPLOAD
   ================================= */
 
-  const handleDirectImageUpload =
-    async (e) => {
+ const handleDirectImageUpload =
+async (e) => {
 
-      const files =
-        Array.from(
-          e.target.files
-        );
+  setMode("studio");
 
-      for (const file of files) {
+  const files =
+    Array.from(e.target.files);
 
-        const hasTransparency =
-          await checkTransparency(
-            file
-          );
+  for (const file of files) {
 
-        if (
-          !hasTransparency
-        ) {
+    // transparency check
+    const hasTransparency =
+      await checkTransparency(file);
 
-          alert(
-            "Please upload image with removed background."
-          );
+    if (!hasTransparency) {
 
-          continue;
-        }
+      alert(
+        "Please upload a transparent PNG image."
+      );
 
-        const imageUrl =
-          URL.createObjectURL(
-            file
-          );
+      continue;
+    }
 
-        setPlacedImages(
-          (prev) => [
-            ...prev,
-            {
-              id:
-                Date.now() +
-                Math.random(),
+    const imageUrl =
+      URL.createObjectURL(file);
 
-              src:
-                imageUrl,
+    const newImage = {
 
-              x: 300,
-              y: 300,
-            },
-          ]
-        );
-      }
+      id:
+        Date.now() + Math.random(),
+
+      src: imageUrl,
+
+      x: 200,
+      y: 200,
+
+      width: 120,
+      height: 120,
+
+      rotation: 0,
     };
 
+    setPlacedImages((prev) => [
+      ...prev,
+      newImage,
+    ]);
+  }
+};
   /* =================================
      SHAPES
   ================================= */
@@ -480,6 +590,7 @@ const fillBracelet = () => {
               s.id
             )
         )
+
       );
 
       setSelectedIds([]);
@@ -547,7 +658,7 @@ const fillBracelet = () => {
 
       size: 50,
 
-      color: "#cccccc",
+      color: "#7a34a3",
 
       beadImage: null
     };
@@ -559,22 +670,48 @@ const fillBracelet = () => {
 
     setTool("select");
   };
+  //add shapecolor
 
-  /* =================================
-     DROP
-  ================================= */
+const changeShapeColor = (
+  color
+) => {
 
-  const [{ isOver }, drop] =
-    useDrop(() => ({
-      accept: "BEAD",
+  setShapes((prev) =>
+    prev.map((shape) =>
 
-      collect: (
-        monitor
-      ) => ({
-        isOver:
-          !!monitor.isOver(),
-      }),
-    }));
+      selectedIds.includes(
+        shape.id
+      )
+
+        ? {
+            ...shape,
+            color,
+          }
+
+        : shape
+    )
+  );
+};
+   
+
+ //load template
+const loadTemplate =
+(
+  template
+) => {
+
+  console.log(template);
+
+ setMode("builder");
+
+setTimeout(() => {
+
+  setSelectedTemplate(
+    template
+  );
+
+}, 0);
+};
 
   /* =================================
      SHORTCUTS
@@ -675,13 +812,9 @@ const fillBracelet = () => {
     setSelectedBeadIndex
   ] = useState(null);
 
-  const selectedBead =
-    selectedBeadIndex !==
-    null
-      ? beads[
-          selectedBeadIndex
-        ]
-      : null;
+
+  
+
 
   /* =================================
      UI
@@ -897,16 +1030,10 @@ const [canvasKey,
 
         {/* CENTER CANVAS */}
 
-        <div
-          ref={(node) => {
-
-            ref.current = node;
-
-            drop(node);
-          }}
-
-          className="bracelet-area"
-        >
+       <div
+  ref={ref}
+  className="bracelet-area"
+>
 
           {!selectedString &&
   mode !== "studio" &&
@@ -932,38 +1059,144 @@ const [canvasKey,
           )}
 
           <div className="canvas-content">
+{/* =================================
+   TEMPLATE PAGES
+================================= */}
 
-  {selectedCategory ===
-"bracelets" ? (
+{mode === "template" &&
 
-  <BraceletBuilder
+selectedCategory ===
+"bracelets" && (
 
-    slots={braceletSlots}
+  <BraceletTemplates
 
-    setSlots={
-      setBraceletSlots
-    }
-
-    selectedIndex={
-      selectedBraceletIndex
-    }
-
-    setSelectedIndex={
-      setSelectedBraceletIndex
-    }
-
-    selectedBuilderBead={
-      selectedBuilderBead
+    loadTemplate={
+      loadTemplate
     }
 
   />
+)}
 
-) : selectedCategory ===
+{mode === "template" &&
+
+selectedCategory ===
+"earrings" && (
+
+  <EarringTemplates
+
+    loadTemplate={
+      loadTemplate
+    }
+
+  />
+)}
+
+{mode === "template" &&
+
+selectedCategory ===
+"necklace" && (
+
+  <NecklaceTemplates
+
+    loadTemplate={
+      loadTemplate
+    }
+
+  />
+)}
+
+{/* =================================
+   BUILDERS
+================================= */}
+
+{mode === "template" &&
+
+selectedCategory ===
+"bracelets" ? (
+
+  selectedTemplate?.id ===
+  "ladder-pattern" ? (
+
+    <PatternBuilder
+
+      template={
+        selectedTemplate.pattern
+      }
+
+      slots={
+        braceletSlots
+      }
+
+      setSlots={
+        setBraceletSlots
+      }
+
+      selectedIndex={
+        selectedBraceletIndex
+      }
+
+      setSelectedIndex={
+        setSelectedBraceletIndex
+      }
+
+      selectedBuilderBead={
+        selectedBuilderBead
+      }
+
+    />
+
+  ) : (
+
+    <BraceletBuilder
+
+      template={
+
+
+
+
+
+
+        selectedTemplate
+      }
+
+      slots={
+        braceletSlots
+      }
+
+      setSlots={
+        setBraceletSlots
+      }
+
+      selectedIndex={
+        selectedBraceletIndex
+      }
+
+      setSelectedIndex={
+        setSelectedBraceletIndex
+      }
+
+      selectedBuilderBead={
+        selectedBuilderBead
+      }
+
+    />
+
+  )
+
+) : mode === "template" &&
+
+selectedCategory ===
 "earrings" ? (
 
   <EarringBuilder
 
-    slots={earringSlots}
+    template={
+      selectedTemplate
+    }
+
+    slots={
+      earringSlots
+    }
 
     setSlots={
       setEarringSlots
@@ -983,9 +1216,19 @@ const [canvasKey,
 
   />
 
+) : mode === "template" &&
+
+selectedCategory ===
+"necklace" ? (
+
+  <NecklaceBuilder />
+
 ) : mode === "studio" ? (
 
   <DesignStudioCanvas
+  updateColorRef={
+  updateColorRef
+}
 
     tool={tool}
 
@@ -1001,13 +1244,17 @@ const [canvasKey,
       deleteSelectedShape
     }
 
-    selectedIds={selectedIds}
+    selectedIds={
+      selectedIds
+    }
 
     setSelectedIds={
       setSelectedIds
     }
 
-    placedImages={placedImages}
+    placedImages={
+      placedImages
+    }
 
     setPlacedImages={
       setPlacedImages
@@ -1015,11 +1262,20 @@ const [canvasKey,
 
     key={canvasKey}
 
-    updateShapes={updateShapes}
+    updateShapes={
+      updateShapes
+    }
 
     canvasUndoRef={
       canvasUndoRef
     }
+    selectedBeadIndex={
+  selectedBeadIndex
+}
+
+setSelectedBeadIndex={
+  setSelectedBeadIndex
+}
 
   />
 
@@ -1034,13 +1290,9 @@ const [canvasKey,
 
         <PropertiesPanel
 
-  selectedBeadIndex={
-    selectedBeadIndex
-  }
 
-  selectedBead={
-    selectedBead
-  }
+
+  
 
   setBeads={
     setBeads
@@ -1091,7 +1343,27 @@ const [canvasKey,
   fillBracelet={
     fillBracelet
   }
+changeShapeColor={
+  changeShapeColor
+}
+selectedBuilderBead={
 
+  selectedCategory ===
+  "bracelets"
+
+    ? selectedBraceletBead
+
+    : selectedCategory ===
+      "earrings"
+
+    ? selectedEarringBead
+
+    : selectedBeadIndex
+}
+
+changeBuilderBeadColor={
+  changeBuilderBeadColor
+}
 />
 
       </div>

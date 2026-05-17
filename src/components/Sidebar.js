@@ -108,83 +108,83 @@ const handleLogout = () => {
           CREATE
         </p>
 
-        {/* BRACELETS */}
+       {/* BRACELETS */}
 
-        <button
-          className="sub-item"
+<button
+  className="sub-item"
 
-          onClick={() => {
+  onClick={() => {
 
-            if (
-              location.pathname !==
-              "/designer"
-            ) {
-              navigate("/designer");
-            }
+    if (
+      location.pathname !==
+      "/designer"
+    ) {
+      navigate("/designer");
+    }
 
-            setMode?.("template");
+    setMode?.("template");
 
-            setSelectedCategory?.(
-              "bracelets"
-            );
-          }}
-        >
-          <Circle size={16} />
+    setSelectedCategory?.(
+      "bracelets"
+    );
+  }}
+>
+  <Circle size={16} />
 
-          Bracelets
-        </button>
+  Bracelets
+</button>
 
-        {/* NECKLACES */}
+{/* NECKLACES */}
 
-        <button
-          className="sub-item"
+<button
+  className="sub-item"
 
-          onClick={() => {
+  onClick={() => {
 
-            if (
-              location.pathname !==
-              "/designer"
-            ) {
-              navigate("/designer");
-            }
+    if (
+      location.pathname !==
+      "/designer"
+    ) {
+      navigate("/designer");
+    }
 
-            setMode?.("template");
+    setMode?.("template");
 
-            setSelectedCategory?.(
-              "necklace"
-            );
-          }}
-        >
-          <Circle size={16} />
+    setSelectedCategory?.(
+      "necklaces"
+    );
+  }}
+>
+  <Circle size={16} />
 
-          Necklaces
-        </button>
+  Necklaces
+</button>
 
-        {/* EARRINGS */}
+{/* EARRINGS */}
 
-        <button
-          className="sub-item"
+<button
+  className="sub-item"
 
-          onClick={() => {
+  onClick={() => {
 
-            if (
-              location.pathname !==
-              "/designer"
-            ) {
-              navigate("/designer");
-            }
+    if (
+      location.pathname !==
+      "/designer"
+    ) {
+      navigate("/designer");
+    }
 
-            setMode?.("template");
+    setMode?.("template");
 
-            setSelectedCategory?.(
-              "earrings"
-            );
-          }}
-        >
-          <Circle size={16} />
+    setSelectedCategory?.(
+      "earrings"
+    );
+  }}
+>
+  <Circle size={16} />
 
-          Earrings
-        </button>
+  Earrings
+</button>
 
       </div>
 

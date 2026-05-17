@@ -13,6 +13,9 @@ import JumpRing
 from "./JewelryComponents/JumpRing";
 import LetterBead
 from "./JewelryComponents/LetterBead";
+import { chains }  from "./chains/Data/ChainData";
+import ChainItem from "./chains/Data/ChainItem";
+
 
 
 
@@ -28,7 +31,11 @@ export default function DesignStudioCanvas({
   placedImages,
 setPlacedImages,
 updateShapes,
-canvasUndoRef
+canvasUndoRef,
+  selectedBeadIndex,
+
+  setSelectedBeadIndex,
+  updateColorRef,
 }) {
 
   const canvasRef = useRef(null);
@@ -43,6 +50,9 @@ canvasUndoRef
 
   const [resizingId, setResizingId] =
     useState(null);
+
+  const [rotatingId, setRotatingId] =
+  useState(null);
   const [canvasHistory,
   setCanvasHistory] =
   useState([]);
@@ -54,19 +64,119 @@ canvasUndoRef
   ================================= */
 
   const [placedBeads, setPlacedBeads] =
-    useState([]);
-
-    const [placedChains, setPlacedChains] =
   useState([]);
+
+const [placedChains, setPlacedChains] =
+  useState([]);
+
 const [selectedBeadId, setSelectedBeadId] =
   useState(null);
+
+useEffect(() => {
+
+  if (!updateColorRef)
+    return;
+
+  updateColorRef.current = (
+    colorHex
+  ) => {
+
+    if (
+      selectedBeadId === null
+    ) return;
+
+    const hue =
+      getHueFromHex(
+        colorHex
+      );
+
+    setPlacedBeads((prev) =>
+
+      prev.map((bead) =>
+
+        bead.id ===
+        selectedBeadId
+
+          ? {
+
+              ...bead,
+
+              hue,
+            }
+
+          : bead
+      )
+    );
+  };
+
+}, [selectedBeadId]);
+
+function getHueFromHex(hex) {
+
+  const r =
+    parseInt(
+      hex.substr(1, 2),
+      16
+    ) / 255;
+
+  const g =
+    parseInt(
+      hex.substr(3, 2),
+      16
+    ) / 255;
+
+  const b =
+    parseInt(
+      hex.substr(5, 2),
+      16
+    ) / 255;
+
+  const max =
+    Math.max(r, g, b);
+
+  const min =
+    Math.min(r, g, b);
+
+  let h = 0;
+
+  if (max === min)
+    return 0;
+
+  if (max === r) {
+
+    h =
+      (g - b) /
+      (max - min);
+
+  } else if (
+    max === g
+  ) {
+
+    h =
+      2 +
+      (b - r) /
+      (max - min);
+
+  } else {
+
+    h =
+      4 +
+      (r - g) /
+      (max - min);
+  }
+
+  h = Math.round(h * 60);
+
+  return h < 0
+    ? h + 360
+    : h;
+}
 
 const [draggingBeadId, setDraggingBeadId] =
   useState(null);
 
 const [resizingBeadId, setResizingBeadId] =
   useState(null);
-
 const [selectedImageId, setSelectedImageId] =
   useState(null);
 
@@ -106,7 +216,7 @@ const [redoHistory,
 
  const [{ isOver }, drop] =
   useDrop(() => ({
-    accept: ["BEAD", "CHAIN"],
+    accept: ["BEAD", "CHAIN", "STRING"],
 
     drop: (item, monitor) => {
 
@@ -123,49 +233,129 @@ const [redoHistory,
 
       const y =
         offset.y - rect.top;
+/* =====================
+   CHAIN
+===================== */
 
-      /* =====================
-         CHAIN
-      ===================== */
+if (
+  item.type === "CHAIN"
+) {
 
-      if (
-        item.type === "CHAIN"
-      ) {
+  setPlacedChains(
+    (prev) => [
+      ...prev,
 
-        setPlacedChains(
-          (prev) => [
-            ...prev,
+      {
+        id: Date.now(),
 
-            {
-              id: Date.now(),
+       points: [
 
-  points: [
-    {
-      x,
-      y,
-    },
+  {
+    x,
+    y,
+  },
 
-    {
-      x,
-      y: y + 120,
-    },
+  {
+    x: x + 40,
+    y: y + 60,
+  },
 
-    {
-      x,
-      y: y + 240,
-    },
-  ],
+  {
+    x: x - 20,
+    y: y + 120,
+  },
 
-  thickness: 12,
+  {
+    x: x + 50,
+    y: y + 180,
+  },
 
-  rotation: 0,
-            },
-          ]
-        );
+  {
+    x: x - 10,
+    y: y + 240,
+  },
 
-        return;
-      }
+  {
+    x: x + 40,
+    y: y + 300,
+  },
 
+],
+
+        thickness: 12,
+
+        rotation: 0,
+      },
+    ]
+  );
+
+  return;
+}
+
+/* =====================
+   STRING IMAGE
+===================== */
+
+if (
+  item.type === "STRING"
+) {
+
+  setPlacedChains(
+    (prev) => [
+
+      ...prev,
+
+      {
+
+        id: Date.now(),
+
+        isString: true,
+
+        color:
+          item.color ||
+
+          "#8B5A2B",
+
+      points: [
+
+  {
+    x,
+    y,
+  },
+
+  {
+    x: x + 40,
+    y: y - 60,
+  },
+
+  {
+    x: x + 80,
+    y: y + 20,
+  },
+
+  {
+    x: x + 120,
+    y: y - 40,
+  },
+
+  {
+    x: x + 170,
+    y: y + 10,
+  },
+
+  {
+    x: x + 240,
+    y,
+  },
+
+],
+      },
+    ]
+  );
+
+  return;
+}
+     
       /* =====================
          BEAD
       ===================== */
@@ -357,27 +547,52 @@ const createCurvePath = (
   }
 
   let d = `
+
     M ${points[0].x}
-    ${points[0].y}
+      ${points[0].y}
+
   `;
 
   for (
-    let i = 1;
-    i < points.length;
+    let i = 0;
+    i < points.length - 1;
     i++
   ) {
 
-    const prev =
-      points[i - 1];
-
-    const curr =
+    const current =
       points[i];
 
+    const next =
+      points[i + 1];
+
+    const midX =
+      (current.x + next.x) / 2;
+
+    const midY =
+      (current.y + next.y) / 2;
+
     d += `
-      L ${curr.x}
-      ${curr.y}
+
+      Q ${current.x}
+        ${current.y}
+
+        ${midX}
+        ${midY}
+
     `;
   }
+
+  const last =
+    points[
+      points.length - 1
+    ];
+
+  d += `
+
+    T ${last.x}
+      ${last.y}
+
+  `;
 
   return d;
 };
@@ -388,6 +603,7 @@ const handleMouseMove = (e) => {
 if (
   draggingId === null &&
   resizingId === null &&
+  rotatingId === null &&
 
   draggingBeadId === null &&
   resizingBeadId === null &&
@@ -451,6 +667,34 @@ if (draggingPoint) {
   return;
 }
 
+/* ================================
+   SHAPE ROTATE
+================================= */
+
+if (rotatingId !== null) {
+
+  setShapes((prev) =>
+    prev.map((shape) =>
+
+      shape.id === rotatingId
+
+        ? {
+            ...shape,
+
+            rotation:
+              Math.atan2(
+                y - shape.y,
+                x - shape.x
+              ) *
+              (180 / Math.PI),
+          }
+
+        : shape
+    )
+  );
+
+  return;
+}
   /* ================================
      SHAPE RESIZE
   ================================= */
@@ -691,6 +935,8 @@ if (draggingChainId !== null) {
 
   setDraggingId(null);
   setResizingId(null);
+  setRotatingId(null);
+  
 
   /* BEADS */
 
@@ -957,17 +1203,18 @@ return (
                   ? shape.size + 10
                   : shape.size,
 
-              background:
-                shape.type ===
-                "donut"
-                  ? "transparent"
-                  : shape.color,
+              backgroundColor:
+  shape.type === "donut"
+    ? "transparent"
+    : (shape.color || "#c084fc"),
 
-              border:
-                shape.type ===
-                "donut"
-                  ? `8px solid ${shape.color}`
-                  : undefined,
+border:
+  shape.type ===
+  "donut"
+    ? `8px solid ${
+        shape.color || "#c084fc"
+      }`
+    : undefined,
 
               borderRadius:
                 shape.type ===
@@ -996,11 +1243,17 @@ return (
                   ? "polygon(50% 0%,100% 50%,50% 100%,0% 50%)"
                   : "none",
 
-              transform:
-                shape.type ===
-                "teardrop"
-                  ? "rotate(45deg)"
-                  : "none",
+              transform: `
+  translate(-50%, -50%)
+  rotate(
+    ${(shape.rotation || 0) +
+    (shape.type === "teardrop"
+      ? 45
+      : 0)}deg
+  )
+`,
+
+transformOrigin: "center",
             }}
           >
             {/* RESIZE */}
@@ -1037,6 +1290,25 @@ return (
                 }}
               />
             )}
+
+            {selectedIds.includes(
+  shape.id
+) && (
+  <div
+    className="rotate-handle"
+
+    onMouseDown={(e) => {
+
+      e.stopPropagation();
+
+      setDraggingId(null);
+
+      setRotatingId(
+        shape.id
+      );
+    }}
+  />
+)}
 {/* DELETE */}
 
 {selectedIds.includes(
@@ -1080,9 +1352,17 @@ return (
       if (e.button !== 0)
         return;
 
-      setSelectedBeadId(bead.id);
+      setSelectedBeadId(
+  bead.id
+);
 
-      setDraggingBeadId(bead.id);
+setSelectedBeadIndex(
+  bead.id
+);
+
+setDraggingBeadId(
+  bead.id
+);
     }}
     style={{
       left: bead.x,
@@ -1121,11 +1401,31 @@ return (
 ) : (
 
   <img
-    src={bead.src}
-    alt="Dropped Bead"
-    draggable={false}
-    className="design-bead"
-  />
+
+  src={bead.src}
+
+  alt="Dropped Bead"
+
+  draggable={false}
+
+  className="design-bead"
+
+  style={{
+
+    filter: `
+
+      hue-rotate(
+        ${bead.hue || 0}deg
+      )
+
+      brightness(
+        ${bead.brightness || 1}
+      )
+
+    `,
+
+  }}
+/>
 
 )}
 
@@ -1253,49 +1553,72 @@ return (
 
   height="100%"
 >
-  {generateChainLinks(
-  chain.points
-).map((link, index) => (
+ {chain.isString ? (
 
-<ellipse
-  key={index}
+  <path
 
-  cx={
-    index % 2 === 0
-      ? link.x
-      : link.x + 2
-  }
+    d={createCurvePath(
+      chain.points
+    )}
 
-  cy={link.y}
+    stroke={
+      chain.color ||
+      "#8B5A2B"
+    }
 
-  rx="7"
+    strokeWidth="4"
 
-  ry="12"
+    fill="none"
 
-  fill="none"
+    strokeLinecap="round"
+  />
 
-  stroke="#D4AF37"
+) : (
 
-  strokeWidth="3"
+  generateChainLinks(
+    chain.points
+  ).map((link, index) => (
 
-  transform={`
-    rotate(
-      ${
-        index % 2 === 0
-          ? 0
-          : 90
-      }
-      ${
+    <ellipse
+      key={index}
+
+      cx={
         index % 2 === 0
           ? link.x
           : link.x + 2
       }
-      ${link.y}
-    )
-  `}
-/>
 
-))}
+      cy={link.y}
+
+      rx="7"
+
+      ry="12"
+
+      fill="none"
+
+      stroke="#D4AF37"
+
+      strokeWidth="3"
+
+      transform={`
+        rotate(
+          ${
+            index % 2 === 0
+              ? 0
+              : 90
+          }
+          ${
+            index % 2 === 0
+              ? link.x
+              : link.x + 2
+          }
+          ${link.y}
+        )
+      `}
+    />
+
+  ))
+)}
 </svg>
 
 {chain.points.map(
